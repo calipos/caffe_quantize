@@ -13,27 +13,20 @@ if osp.join(CAFFE_ROOT,'python') not in sys.path:
 
 import caffe
 
-caffe.set_mode_cpu()
+caffe.set_mode_gpu()
 original_net = caffe.Net('./quantizedNet.prototxt', caffe.TEST)
-im = np.random.random((1,3,304,304))
+im = np.random.random((1,3,304,304))+10
 data_original_net = original_net.blobs['data']
 data_original_net.data[...] = im
 original_net.forward()
 original_net.save("quantized_.caffemodel")
 
 
-caffe.set_mode_cpu()
+caffe.set_mode_gpu()
 quantized_net = caffe.Net('./quantizedNet.prototxt', "./quantized_.caffemodel", caffe.TEST)
 layer_q = quantized_net._layer_by_name("stem1")
 print "layer_q.blobs.size() = ",len(layer_q.blobs)
 print "layer_q.blobs[0] = ",len(layer_q.blobs[0].shape)
 print "layer_q.blobs[1] = ",len(layer_q.blobs[1].shape)
-print "layer_q.blobs[2] = ",len(layer_q.blobs[2].shape)
-print "layer_q.blobs[3] = ",len(layer_q.blobs[3].shape)
-print "layer_q.blobs[4] = ",len(layer_q.blobs[4].shape)
-print "layer_q.blobs[5] = ",len(layer_q.blobs[5].shape)
-print "layer_q.blobs[6] = ",len(layer_q.blobs[6].shape)
-print "layer_q.blobs[7] = ",len(layer_q.blobs[7].shape)
-print "layer_q.blobs[8] = ",len(layer_q.blobs[8].shape)
 
 

@@ -246,8 +246,8 @@ template<typename Dtype>
 void caffe_gpu_clipByValue(const int n, const Dtype* x, Dtype* y);
 template<typename Dtype>
 void caffe_gpu_clipByValue_grad(const int n, const Dtype* diff,const Dtype* old_weight, Dtype* y);
-
-void showDevice(const float*data,int count);
+template<typename Dtype>
+void showDevice(const Dtype*data,int count);
 
 
 template<typename Dtype>

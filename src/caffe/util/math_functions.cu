@@ -9,11 +9,35 @@
 #include "caffe/util/math_functions.hpp"
 
 namespace caffe {
-    
-void showDevice(const float*data,int count)
+template <> 
+void showDevice<float>(const float*data,int count)
 {
     float *show=(float*)malloc(count*sizeof(float));
     cudaMemcpy(show,data,count*sizeof(float),cudaMemcpyDeviceToHost);
+    for(int i=0;i<count;i++)
+    {
+        std::cout<<show[i]<<" ";
+        if(i%10==9)std::cout <<std::endl;
+    }
+    free(show);
+}
+template <> 
+void showDevice<double>(const double*data,int count)
+{
+    double *show=(double*)malloc(count*sizeof(double));
+    cudaMemcpy(show,data,count*sizeof(double),cudaMemcpyDeviceToHost);
+    for(int i=0;i<count;i++)
+    {
+        std::cout<<show[i]<<" ";
+        if(i%10==9)std::cout <<std::endl;
+    }
+    free(show);
+}
+template <> 
+void showDevice<signed char>(const signed char*data,int count)
+{
+    signed char *show=(signed char*)malloc(count*sizeof(signed char));
+    cudaMemcpy(show,data,count*sizeof(signed char),cudaMemcpyDeviceToHost);
     for(int i=0;i<count;i++)
     {
         std::cout<<show[i]<<" ";

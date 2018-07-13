@@ -4,7 +4,18 @@
 #include "caffe/util/im2col.hpp"
 
 namespace caffe {
-
+template <typename Dtype>
+void showDevice2(const Dtype*data,int count)
+{
+    Dtype *show=(Dtype*)malloc(count*sizeof(Dtype));
+    cudaMemcpy(show,data,count*sizeof(Dtype),cudaMemcpyDeviceToHost);
+    for(int i=0;i<count;i++)
+    {
+        std::cout<<show[i]<<" ";
+        if(i%10==9)std::cout <<std::endl;
+    }
+    free(show);
+}
 template <typename Dtype>
 __global__ void im2col_gpu_kernel(const int n, const Dtype* data_im,
     const int height, const int width, const int kernel_h, const int kernel_w,
@@ -52,23 +63,17 @@ void im2col_gpu(const Dtype* data_im, const int channels,
   int width_col = (width + 2 * pad_w -
       (dilation_w * (kernel_w - 1) + 1)) / stride_w + 1;
   int num_kernels = channels * height_col * width_col;
-  // NOLINT_NEXT_LINE(whitespace/operators)
-// cudaEvent_t start1;
-// cudaEvent_t stop1;
-// cudaEventCreate(&start1);
-// cudaEventCreate(&stop1);
-// cudaEventRecord(start1,NULL);
+
+  
   im2col_gpu_kernel<Dtype><<<CAFFE_GET_BLOCKS(num_kernels),
                              CAFFE_CUDA_NUM_THREADS>>>(
       num_kernels, data_im, height, width, kernel_h, kernel_w, pad_h,
       pad_w, stride_h, stride_w, dilation_h, dilation_w, height_col,
       width_col, data_col);
+
   CUDA_POST_KERNEL_CHECK;
-// cudaEventRecord(stop1,NULL);
-// cudaEventSynchronize(stop1);
-// float tim_=0;
-// cudaEventElapsedTime(&tim_,start1,stop1);
-// std::cout<<"im2col = "<<tim_<<std::endl;
+
+
 }
 
 // Explicit instantiation
