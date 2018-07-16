@@ -144,6 +144,10 @@ void caffe_cpu_scale(const int n, const Dtype alpha, const Dtype *x, Dtype* y);
 
 #ifndef CPU_ONLY  // GPU
 
+void caffe_gpu_iGemm(const CBLAS_TRANSPOSE TransA,
+    const CBLAS_TRANSPOSE TransB, const int M, const int N, const int K,
+    const int alpha, const signed char* A, const signed char* B, const int beta,
+    int* C);
 // Decaf gpu gemm provides an interface that is almost the same as the cpu
 // gemm function - following the c convention and calling the fortran-order
 // gpu code under the hood.
@@ -237,8 +241,10 @@ void caffe_gpu_asum(const int n, const Dtype* x, Dtype* y);
 
 template<typename Dtype>
 void caffe_gpu_quantize_nobias(const int count, const Dtype*fp32weights, signed char*int8weight, const Dtype minT, const Dtype maxT, const Dtype unit_scale);
-
-
+template<typename Dtype>
+void im2col_1x1_gpu_quantized(int n ,const Dtype*data, signed char*out, const Dtype t1, const Dtype t2, const Dtype unit_scale);
+template<typename Dtype>
+void int2Dtype(int n ,const int*data, Dtype*out, const Dtype unit_scale);
 
 template<typename Dtype>
 void caffe_gpu_quantizeK(const int n, const Dtype* x, Dtype* y,const Dtype quantizeK);

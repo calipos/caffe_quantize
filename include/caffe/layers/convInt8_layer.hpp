@@ -7,6 +7,10 @@
 #include "caffe/layer.hpp"
 #include "caffe/proto/caffe.pb.h"
 #include "caffe/layers/base_conv_layer.hpp"
+
+//#define SHOW_FP32_OUT
+
+
 namespace caffe {
 
 /**
@@ -55,7 +59,9 @@ class ConvInt8Layer : public Layer<Dtype> {
   void weight2int8(const int count, const Dtype*fp32weights, signed char*int8weight, const Dtype minT, const Dtype maxT, const Dtype unit_scale=-1.0, const Dtype bias=0.0, bool doBias=false);
 
   Blob<signed char> inputInt8;
-  
+  Blob<int> int32out;
+  Dtype input_unit_scale;
+  Dtype input_unit_scale_1;//倒数
   
   //==========================================//
  protected:
@@ -156,7 +162,9 @@ class ConvInt8Layer : public Layer<Dtype> {
   int output_offset_;
 
   Blob<signed char> col_buffer_;
+#ifdef SHOW_FP32_OUT
   Blob<Dtype> col_buffer_show_;
+#endif
   Blob<Dtype> bias_multiplier_;
 };
 

@@ -43,6 +43,12 @@ private:\
   template class classname<float>; \
   template class classname<double>
 
+#define INSTANTIATE_CLASS_schar_added(classname) \
+  char gInstantiationGuard##classname; \
+  template class classname<float>; \
+  template class classname<double>; \
+  template class classname<signed char>
+
 #define INSTANTIATE_LAYER_GPU_FORWARD(classname) \
   template void classname<float>::Forward_gpu( \
       const std::vector<Blob<float>*>& bottom, \

@@ -532,10 +532,18 @@ void Blob<Dtype>::FromProto(const BlobProto& proto, bool reshape) {
     for (int i = 0; i < count_; ++i) {
       data_vec[i] = proto.double_data(i);
     }
-  } else {
+  }
+  if (proto.data_size() > 0) {
     CHECK_EQ(count_, proto.data_size());
     for (int i = 0; i < count_; ++i) {
       data_vec[i] = proto.data(i);
+    }
+  }
+  if (proto.sint32_data_size() > 0) {
+    CHECK_EQ(count_, proto.sint32_data_size());
+    for (int i = 0; i < count_; ++i) {
+      data_vec[i] = proto.sint32_data(i);
+      //LOG(INFO)<<data_vec[i];
     }
   }
   if (proto.double_diff_size() > 0) {
@@ -549,6 +557,12 @@ void Blob<Dtype>::FromProto(const BlobProto& proto, bool reshape) {
     Dtype* diff_vec = mutable_cpu_diff();
     for (int i = 0; i < count_; ++i) {
       diff_vec[i] = proto.diff(i);
+    }
+  }else if (proto.sint32_diff_size() > 0) {
+    CHECK_EQ(count_, proto.sint32_diff_size());
+    Dtype* diff_vec = mutable_cpu_diff();
+    for (int i = 0; i < count_; ++i) {
+      diff_vec[i] = proto.sint32_diff(i);
     }
   }
 }
@@ -612,8 +626,8 @@ void Blob<signed char>::ToProto(BlobProto* proto, bool write_diff) const {
   }
 }
 
-INSTANTIATE_CLASS(Blob);
-template class Blob<signed char>;
+INSTANTIATE_CLASS_schar_added(Blob);
+//template class Blob<signed char>;
 template class Blob<bool>;
 template class Blob<int>;
 template class Blob<unsigned int>;

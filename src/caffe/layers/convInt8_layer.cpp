@@ -160,7 +160,7 @@ void ConvInt8Layer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   for(int i=0;i<8;i++) this->blobs_[0].get()->mutable_cpu_data()[i]=-1;
   this->blobs_int8_[0].reset(new Blob<signed char>(weight_shape));
   for(int i=0;i<this->blobs_int8_[0].get()->count();i++) 
-      this->blobs_int8_[0].get()->mutable_cpu_data()[i]=i;
+      this->blobs_int8_[0].get()->mutable_cpu_data()[i]=i-10;
   if (conv_learnable_blob_size==2) 
   {
     this->blobs_[1].reset(new Blob<Dtype>(bias_shape));
@@ -169,12 +169,13 @@ void ConvInt8Layer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   }
   kernel_dim_ = this->blobs_[0]->count(1);
   weight_offset_ = conv_out_channels_ * kernel_dim_ / group_;
+  CHECK(conv_out_channels_/group_%4==0)<<conv_out_channels_<<" / "<<group_;
+  CHECK(kernel_dim_%4==0)<<kernel_dim_;
 }
 
 template <typename Dtype>
 void ConvInt8Layer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
-
     const int first_spatial_axis = channel_axis_ + 1;
   CHECK_EQ(bottom[0]->num_axes(), first_spatial_axis + num_spatial_axes_)
       << "bottom num_axes may not change.";
@@ -196,6 +197,8 @@ void ConvInt8Layer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
     top_shape.push_back(output_shape_[i]);
   }
   top[0]->Reshape(top_shape);
+  int32out.Reshape(top_shape);
+  conv_out_spatial_dim_ = top[0]->count(first_spatial_axis);
   col_offset_ = kernel_dim_ * conv_out_spatial_dim_;
   output_offset_ = conv_out_channels_ * conv_out_spatial_dim_ / group_;
   // Setup input dimensions (conv_input_shape_).
@@ -214,7 +217,11 @@ void ConvInt8Layer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
     col_buffer_shape_.push_back(output_shape_[i]);
   }
   col_buffer_.Reshape(col_buffer_shape_);
-  col_buffer_show_.Reshape(col_buffer_shape_);//************************************
+  if(is_1x1_) CHECK(col_buffer_.count()==bottom[0]->count())<<col_buffer_.count()<<" : "<<bottom[0]->count();
+#ifdef SHOW_FP32_OUT
+  col_buffer_show_.Reshape(col_buffer_shape_);
+#endif
+  //************************************
   bottom_dim_ = bottom[0]->count(channel_axis_);
   top_dim_ = top[0]->count(channel_axis_);
   num_kernels_im2col_ = conv_in_channels_ * conv_out_spatial_dim_;
@@ -227,6 +234,7 @@ void ConvInt8Layer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
     caffe_set(bias_multiplier_.count(), Dtype(1),
         bias_multiplier_.mutable_cpu_data());
   }
+  CHECK(conv_out_spatial_dim_%4==0)<<conv_out_spatial_dim_<<" - "<<top[0]->shape_string();
 /*******************************************************************/
 inputInt8.Reshape(col_buffer_shape_);
 

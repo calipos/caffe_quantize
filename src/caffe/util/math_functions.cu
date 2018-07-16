@@ -87,6 +87,53 @@ void caffe_gpu_quantizeK<double>(const int n, const double* x, double* y,const d
       n, x, y, quantizeK);
 }
 
+template <typename Dtype>
+__global__ void int2Dtype_kernel(const int n, const int* x, Dtype* y, const Dtype unit_scale)
+{
+  CUDA_KERNEL_LOOP(index, n) {
+    y[index]=Dtype(x[index])*unit_scale;
+  }
+}
+template<>
+void int2Dtype<float>(int n ,const int*data, float*out, const float unit_scale)
+{
+  int2Dtype_kernel<float><<<CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS>>>(n, data, out, unit_scale);
+}
+template<>
+void int2Dtype<double>(int n ,const int*data, double*out, const double unit_scale)
+{
+  int2Dtype_kernel<double><<<CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS>>>(n, data, out, unit_scale);
+}
+
+template <typename Dtype>
+__global__ void im2col_1x1_gpu_quantized_kernel(const int n, const Dtype* x, signed char* y, const Dtype t1, const Dtype t2, const Dtype unit_scale)
+{
+  CUDA_KERNEL_LOOP(index, n) {
+          if(x[index]<t1)
+          {
+            y[index] = (-127);
+          }
+          else if(x[index]>t2)
+          {
+            y[index] = (127);
+          }
+          else
+          {
+            y[index] = (signed char)(round(x[index]*unit_scale));
+          }
+  }
+}
+template<>
+void im2col_1x1_gpu_quantized<float>(int n, const float*data, signed char*out, const float t1, const float t2, const float unit_scale)
+{
+    im2col_1x1_gpu_quantized_kernel<float><<<CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS>>>(n, data, out, t1, t2, unit_scale);
+}
+template<>
+void im2col_1x1_gpu_quantized<double>(int n, const double*data, signed char*out, const double t1, const double t2, const double unit_scale)
+{
+    im2col_1x1_gpu_quantized_kernel<double><<<CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS>>>(n, data, out, t1, t2, unit_scale);
+}
+
 
 template <typename Dtype>
 __global__ void clipByValue_kernel(const int n, const Dtype* x, Dtype* y)
@@ -164,6 +211,26 @@ void caffe_gpu_quantize_nobias<double>(const int count, const double*fp32weights
   caffe_gpu_quantize_nobias_kernel<double><<<CAFFE_GET_BLOCKS(count), CAFFE_CUDA_NUM_THREADS>>>(
       count, fp32weights, int8weight, minT, maxT, unit_scale);
 }
+
+void caffe_gpu_iGemm(const CBLAS_TRANSPOSE TransA,
+    const CBLAS_TRANSPOSE TransB, const int M, const int N, const int K,
+    const int alpha, const signed char* A, const signed char* B, const int beta,
+    int* C)
+{
+    int lda = (TransA == CblasNoTrans) ? K : M;
+  int ldb = (TransB == CblasNoTrans) ? N : K;
+  cublasOperation_t cuTransA =
+      (TransA == CblasNoTrans) ? CUBLAS_OP_N : CUBLAS_OP_T;
+  cublasOperation_t cuTransB =
+      (TransB == CblasNoTrans) ? CUBLAS_OP_N : CUBLAS_OP_T;
+  CUBLAS_CHECK(cublasGemmEx(Caffe::cublas_handle(), cuTransB, cuTransA,
+      N, M, K, &alpha, B, CUDA_R_8I, ldb, A, CUDA_R_8I, lda, &beta, C, CUDA_R_32I, N, CUDA_R_32I, CUBLAS_GEMM_DFALT));
+      
+      
+
+}
+
+
 
 template <>
 void caffe_gpu_gemm<float>(const CBLAS_TRANSPOSE TransA,

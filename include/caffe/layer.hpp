@@ -182,7 +182,13 @@ class Layer {
   vector<shared_ptr<Blob<Dtype> > >& blobs() {
     return blobs_;
   }
-
+  vector<shared_ptr<Blob<signed char> > >& int8blobs() {
+    return blobs_int8_;
+  }
+  
+  int int8blobsSize(){return blobs_int8_.size();}
+  std::string int8blobsShapeString(int i){return blobs_int8_[i]->shape_string();}
+  void showInt8blobs(int i, int count);
   /**
    * @brief Returns the layer parameter.
    */
@@ -511,6 +517,9 @@ void Layer<Dtype>::ToProto(LayerParameter* param, bool write_diff) {
   param->clear_blobs();
   for (int i = 0; i < blobs_.size(); ++i) {
     blobs_[i]->ToProto(param->add_blobs(), write_diff);
+  }
+  for (int i = 0; i < blobs_int8_.size(); ++i) {
+    blobs_int8_[i]->ToProto(param->add_blobs(), write_diff);
   }
 }
 
