@@ -546,6 +546,7 @@ message LayerParameter {
   optional WindowDataParameter window_data_param = 129;
   optional ConvDorefaParameter convolution_dorefa_param = 1904;
   optional ConvInt8Parameter conv_int8_param = 1905;
+  optional ConvInt8KLParameter conv_int8_withkl_param = 1906;
 }
 
 // Message that stores parameters used to apply transformation
@@ -1250,6 +1251,18 @@ message ConvInt8Parameter
   optional bool input_need_re_quantize = 1 [default = true];
   optional bool has_input_bias = 2 [default = true];
   optional bool has_weight_bias = 3 [default = true];
+}
+
+message ConvInt8KLParameter
+{
+  optional uint32 bottom_fp32_idx = 1 [default = 1];
+  optional uint32 pre_test_batches = 2 [default = 2000];
+  optional uint32 input_adjust_segment_count = 3 [default = 100];
+  optional uint32 input_adjust_each_count = 4 [default = 100];
+  optional uint32 weight_adjust_segment_count = 5 [default = 100];
+  optional uint32 weight_adjust_each_count = 6 [default = 100];
+  optional string weight_model_path = 7 [default=""];
+  optional string layer_fp32_name = 8 [default=""];
 }
 message ConvDorefaParameter
 {

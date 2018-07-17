@@ -225,12 +225,60 @@ void caffe_gpu_iGemm(const CBLAS_TRANSPOSE TransA,
       (TransB == CblasNoTrans) ? CUBLAS_OP_N : CUBLAS_OP_T;
   CUBLAS_CHECK(cublasGemmEx(Caffe::cublas_handle(), cuTransB, cuTransA,
       N, M, K, &alpha, B, CUDA_R_8I, ldb, A, CUDA_R_8I, lda, &beta, C, CUDA_R_32I, N, CUDA_R_32I, CUBLAS_GEMM_DFALT));
-      
-      
-
 }
 
 
+
+template<typename Dtype>
+__global__ void getMaxMin(int n, const Dtype*a, Dtype*max, Dtype*min)
+{
+  __shared__ Dtype maxTemp[CAFFE_CUDA_NUM_THREADS_FORMAXMIN];
+  __shared__ Dtype minTemp[CAFFE_CUDA_NUM_THREADS_FORMAXMIN];
+  maxTemp[threadIdx.x]=a[0];
+  minTemp[threadIdx.x]=a[0];
+  __syncthreads();
+  
+  int tid=threadIdx.x;
+  while(tid<n)
+  {
+    if(a[tid]>maxTemp[threadIdx.x])
+    {
+      maxTemp[threadIdx.x]=a[tid];
+    }
+    if(a[tid]<minTemp[threadIdx.x])
+    {
+      minTemp[threadIdx.x]=a[tid];
+    }
+    tid+=blockDim.x;
+  }
+  __syncthreads();
+  int i=CAFFE_CUDA_NUM_THREADS_FORMAXMIN/2;
+  while(i!=0)
+  {
+    if(threadIdx.x<i)
+    {
+      maxTemp[threadIdx.x] = maxTemp[threadIdx.x]>maxTemp[threadIdx.x+i]?maxTemp[threadIdx.x]:maxTemp[threadIdx.x+i];
+      minTemp[threadIdx.x] = minTemp[threadIdx.x]<minTemp[threadIdx.x+i]?minTemp[threadIdx.x]:minTemp[threadIdx.x+i];
+    }
+    i/=2;
+  }
+  __syncthreads();
+  if(i==0 && threadIdx.x==0)
+  {
+    *max=maxTemp[0];
+    *min=minTemp[0];
+  }
+}
+template <>
+void getMaxAndMIn<float>(int n, const float*data, float*max, float*min)
+{
+  getMaxMin<float><<<1,CAFFE_CUDA_NUM_THREADS_FORMAXMIN>>>(n,data,max,min);
+}
+template <>
+void getMaxAndMIn<double>(int n, const double*data, double*max, double*min)
+{
+  getMaxMin<double><<<1,CAFFE_CUDA_NUM_THREADS_FORMAXMIN>>>(n,data,max,min);
+}
 
 template <>
 void caffe_gpu_gemm<float>(const CBLAS_TRANSPOSE TransA,

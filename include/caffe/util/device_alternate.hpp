@@ -7,6 +7,7 @@
 
 // Stub out GPU calls as unavailable.
 
+
 #define NO_GPU LOG(FATAL) << "Cannot use GPU in CPU-only Caffe: check mode."
 
 #define STUB_GPU(classname) \
@@ -83,7 +84,7 @@ const char* curandGetErrorString(curandStatus_t error);
 
 // CUDA: use 512 threads per block
 const int CAFFE_CUDA_NUM_THREADS = 512;
-
+#define CAFFE_CUDA_NUM_THREADS_FORMAXMIN   (128)
 // CUDA: number of blocks for threads.
 inline int CAFFE_GET_BLOCKS(const int N) {
   return (N + CAFFE_CUDA_NUM_THREADS - 1) / CAFFE_CUDA_NUM_THREADS;

@@ -8,7 +8,7 @@ input_shape {
 }
 layer {
   name: "stem1"
-  type: "ConvInt8"
+  type: "Convolution"
   bottom: "data"
   top: "stem1"
   convolution_param {
@@ -22,5 +22,32 @@ layer {
     bias_filler {
       type: "constant"
     }
+  }
+}
+
+
+layer {
+  name: "stem1_int8"
+  propagate_down : false
+  propagate_down : false
+  type: "ConvInt8withKL"
+  bottom: "data"
+  bottom: "stem1"
+  top: "stem1_int8"
+  convolution_param {
+    num_output: 32
+    pad: 1
+    kernel_size: 3
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  conv_int8_withkl_param {
+    weight_model_path : "/media/hdd/lbl_trainData/dataBase/ssdpelee/pelee_nobn.caffemodel"
+    layer_fp32_name : "stem1"
   }
 }
