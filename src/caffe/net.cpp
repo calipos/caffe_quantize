@@ -551,7 +551,6 @@ Dtype Net<Dtype>::ForwardFromTo(int start, int end) {
     loss += layer_loss;
     if (debug_info_) { ForwardDebugInfo(i); }
   }
-  LOG(INFO)<<"*****";
   return loss;
 }
 

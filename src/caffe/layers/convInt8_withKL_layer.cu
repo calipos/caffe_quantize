@@ -28,20 +28,21 @@ void ConvInt8withKLLayer<Dtype>::computeInt8Weight(int *idx,const Dtype t1,const
   Dtype each_seg = (t2-t1);
   int this_idx = (*idx-this->preTestBatches);
   int whichWeightSeg=this_idx%(weight_adjust_segment_count*weight_adjust_each_count)/weight_adjust_each_count;
-  Dtype this_t = t1_pos+each_seg*whichWeightSeg/input_adjust_segment_count;
-  if(t1*t2>0)
+  if(current_weight_adjust_segment_idx != whichWeightSeg)
   {
+    current_weight_adjust_segment_idx = whichWeightSeg;
+    Dtype this_t = t1_pos+each_seg*whichWeightSeg/input_adjust_segment_count;
+    this->blobs_[0].get()->mutable_cpu_data()[4]=this_t;
+    this->blobs_[0].get()->mutable_cpu_data()[5]=this_t;
     this->weight_temp_unit_sacle = this_t/127;
     this->weight_temp_unit_sacle_1 = 127.0/this_t;
+    
+    TODO:
   }
-  else
-  {
-    this->weight_temp_unit_sacle = this_t/254;
-    this->weight_temp_unit_sacle_1 = 254.0/this_t;
-  }
+  LOG(INFO)<<"weight_temp_unit_sacle = "<<this->weight_temp_unit_sacle<<";  weight_temp_unit_sacle_1 = "<<this->weight_temp_unit_sacle_1;
 }
 template <typename Dtype>
-void ConvInt8withKLLayer<Dtype>::computeInt8int(int *idx,const Dtype t1,const Dtype t2)
+void ConvInt8withKLLayer<Dtype>::computeInt8input(int *idx,const Dtype t1,const Dtype t2)
 {
   Dtype t1_pos = t1>0?t1:(-t1);
   Dtype t2_pos = t2>0?t2:(-t2);
@@ -49,16 +50,13 @@ void ConvInt8withKLLayer<Dtype>::computeInt8int(int *idx,const Dtype t1,const Dt
   int this_idx = (*idx-this->preTestBatches);
   int whichInputSeg=this_idx/(weight_adjust_segment_count*weight_adjust_each_count)/input_adjust_each_count;
   Dtype this_t = t1_pos+each_seg*whichInputSeg/input_adjust_segment_count;
-  if(t1*t2>0)
-  {
-    this->input_temp_unit_sacle = this_t/127;
-    this->input_temp_unit_sacle_1 = 127.0/this_t;
-  }
-  else
-  {
-    this->input_temp_unit_sacle = this_t/254;
-    this->input_temp_unit_sacle_1 = 254.0/this_t;
-  }
+  this->blobs_[0].get()->mutable_cpu_data()[2]=this_t;
+  this->blobs_[0].get()->mutable_cpu_data()[3]=this_t;
+
+  this->input_temp_unit_sacle = this_t/127;
+  this->input_temp_unit_sacle_1 = 127.0/this_t;
+
+  LOG(INFO)<<"input_temp_unit_sacle = "<<this->input_temp_unit_sacle<<";  input_temp_unit_sacle_1 = "<<this->input_temp_unit_sacle_1;
 }
 
 template <typename Dtype>
@@ -135,9 +133,38 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_bias(Dtype* output, const Dtype* bi
 template <typename Dtype>
 void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
-        if(preTestIdx<preTestBatches) return;
-        LOG(INFO)<<1;
-    
+    if(!weightFp32HasExtracted)  
+    {
+        getFp32Weight();
+        getMaxAndMIn(weightFp32.count(),weightFp32.gpu_data(), &(this->maxAndMin.mutable_gpu_data()[3]),&(this->maxAndMin.mutable_gpu_data()[2]));
+        LOG(INFO)<<this->maxAndMin.cpu_data()[3]<<"\t\t"<<this->maxAndMin.cpu_data()[2];
+    }
+    if(preTestIdx<preTestBatches)
+    {
+        getMaxAndMIn(bottom[0]->count(),bottom[0]->gpu_data(), &(this->maxAndMin.mutable_gpu_data()[1]),&(this->maxAndMin.mutable_gpu_data()[0]));
+        preTestIdx++;
+        if(!isFirstGetMaxMin)
+        {
+            input_scale_t1=this->maxAndMin.cpu_data()[0];
+            input_scale_t2=this->maxAndMin.cpu_data()[1];
+            isFirstGetMaxMin = true;
+        }
+        else
+        {
+          this->maxAndMin.mutable_cpu_data()[0] = this->maxAndMin.cpu_data()[0]>input_scale_t1?input_scale_t1:this->maxAndMin.cpu_data()[0];
+          this->maxAndMin.mutable_cpu_data()[1] = this->maxAndMin.cpu_data()[1]<input_scale_t2?input_scale_t2:this->maxAndMin.cpu_data()[1];
+          input_scale_t1=this->maxAndMin.cpu_data()[0];
+          input_scale_t2=this->maxAndMin.cpu_data()[1];
+        }
+        LOG(INFO)<<"input  region : "<<this->maxAndMin.cpu_data()[1]<<"\t\t"<<this->maxAndMin.cpu_data()[0];
+        LOG(INFO)<<"weight region : "<<this->maxAndMin.cpu_data()[3]<<"\t\t"<<this->maxAndMin.cpu_data()[2];
+        LOG(INFO)<<preTestIdx<<" < "<<preTestBatches;
+    }
+    if(preTestIdx<preTestBatches) return;
+    computeInt8Weight(&preTestIdx,this->maxAndMin.cpu_data()[2],this->maxAndMin.cpu_data()[3]);
+    computeInt8input(&preTestIdx,this->maxAndMin.cpu_data()[0],this->maxAndMin.cpu_data()[1]);
+    preTestIdx++;
+    return;
   const signed char* weight = this->blobs_int8_[0]->gpu_data();
   for (int i = 0; i < bottom.size(); ++i) {
     const Dtype* bottom_data = bottom[i]->gpu_data();

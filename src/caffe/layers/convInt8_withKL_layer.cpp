@@ -171,14 +171,18 @@ void ConvInt8withKLLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     // weight_min = -1e5;
     // weight_max = -1e5;
     maxAndMin.Reshape(std::vector<int>({1,4}));
-    maxAndMin.mutable_cpu_data()[0]=-1e5;
-    maxAndMin.mutable_cpu_data()[1]=-1e5;
-    maxAndMin.mutable_cpu_data()[2]=-1e5;
-    maxAndMin.mutable_cpu_data()[3]=-1e5;
+    maxAndMin.mutable_cpu_data()[0]=-1e7;
+    maxAndMin.mutable_cpu_data()[1]=-1e7;
+    maxAndMin.mutable_cpu_data()[2]=-1e7;
+    maxAndMin.mutable_cpu_data()[3]=-1e7;
+    input_scale_t1=0;
+    input_scale_t2=0;
+    isFirstGetMaxMin=false;
     weight_temp_unit_sacle=0;
     weight_temp_unit_sacle_1=0;
     input_temp_unit_sacle=0;
     input_temp_unit_sacle_1=0;
+    current_weight_adjust_segment_idx=-1;
     input_adjust_segment_count = conv_int8_withkl_param.input_adjust_segment_count();
     input_adjust_each_count = conv_int8_withkl_param.input_adjust_each_count();
     weight_adjust_segment_count = conv_int8_withkl_param.weight_adjust_segment_count();
@@ -196,7 +200,7 @@ void ConvInt8withKLLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 
 
     const ConvInt8Parameter conv_int8_param = this->layer_param_.conv_int8_param();
-  CHECK(bottom.size()==2)<<"bottom.size()>1 not implemented yet and will be ignored in a short time.";
+  //CHECK(bottom.size()==2)<<"bottom.size()>1 not implemented yet and will be ignored in a short time.";
   CHECK(top.size()==1)<<"top.size()>1 not implemented yet and will be ignored in a short time.";
   inputNeedReQuantize = conv_int8_param.input_need_re_quantize();
   hasInputBias = conv_int8_param.has_input_bias();
@@ -302,18 +306,7 @@ void ConvInt8withKLLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
         CHECK(conv_out_spatial_dim_%4==0)<<conv_out_spatial_dim_<<" - "<<top[0]->shape_string();
         /*******************************************************************/
         inputInt8.Reshape(col_buffer_shape_);
-    if(!weightFp32HasExtracted)  
-    {
-        getFp32Weight();
-        getMaxAndMIn(weightFp32.count(),weightFp32.gpu_data(), &(this->maxAndMin.mutable_gpu_data()[3]),&(this->maxAndMin.mutable_gpu_data()[2]));
-        LOG(INFO)<<this->maxAndMin.cpu_data()[3]<<"\t\t"<<this->maxAndMin.cpu_data()[2];
-    }
-    if(preTestIdx<preTestBatches)
-    {
-        getMaxAndMIn(bottom[0]->count(),bottom[0]->gpu_data(), &(this->maxAndMin.mutable_gpu_data()[1]),&(this->maxAndMin.mutable_gpu_data()[0]));
-        preTestIdx++;
-        LOG(INFO)<<this->maxAndMin.cpu_data()[1]<<"\t\t"<<this->maxAndMin.cpu_data()[0];
-    }
+
 }
 
 template <typename Dtype>

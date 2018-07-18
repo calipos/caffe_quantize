@@ -72,10 +72,14 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
   // 3 :Dtype weight_min;
   // 4 :Dtype weight_max;
   Blob<Dtype> maxAndMin;
+  Dtype input_scale_t1;
+  Dtype input_scale_t2;
+  bool isFirstGetMaxMin;
   int input_adjust_segment_count;
   int input_adjust_each_count;
   int weight_adjust_segment_count;
   int weight_adjust_each_count;
+  int current_weight_adjust_segment_idx;
   Dtype input_best_T;
   Dtype weight_best_T;
   Dtype min_entropy;
@@ -87,7 +91,7 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
   Dtype input_temp_unit_sacle_1;
   void getFp32Weight();
   void computeInt8Weight(int*idx,const Dtype t1,const Dtype t2);
-  void computeInt8int(int*idx,const Dtype t1,const Dtype t2);
+  void computeInt8input(int*idx,const Dtype t1,const Dtype t2);
   // void computeInt8Weight(const Dtype t);
   // void computeInt8int(const Dtype t);
   // void computeInt8Weight();
