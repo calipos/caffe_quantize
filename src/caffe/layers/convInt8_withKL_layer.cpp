@@ -217,7 +217,6 @@ void ConvInt8withKLLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   // blobs_[6]:input_bias
   // blobs_[7]:weight_bias
   // blobs_[8]:bias*/
-
   this->blobs_.resize(this->conv_learnable_blob_size);
   this->blobs_int8_.resize(1);
   this->blobs_[0].reset(new Blob<Dtype>(std::vector<int>{1,8}));  
@@ -287,7 +286,7 @@ void ConvInt8withKLLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
         }
         col_buffer_.Reshape(col_buffer_shape_);
         if(is_1x1_) CHECK(col_buffer_.count()==bottom[0]->count())<<col_buffer_.count()<<" : "<<bottom[0]->count();
-#ifdef SHOW_FP32_OUT
+#ifdef SHOW_FP32COL
         col_buffer_show_.Reshape(col_buffer_shape_);
 #endif
         //************************************

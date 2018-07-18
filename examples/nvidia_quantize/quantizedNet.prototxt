@@ -154,7 +154,7 @@ layer {
   conv_int8_withkl_param {
     weight_model_path : "/media/hdd/lbl_trainData/dataBase/ssdpelee/pelee_nobn.caffemodel"
     layer_fp32_name : "stem1"
-    pre_test_batches : 100
+    pre_test_batches : 10
     input_adjust_segment_count : 10
     input_adjust_each_count : 200
     weight_adjust_segment_count : 50

@@ -8,9 +8,10 @@
 #include "caffe/proto/caffe.pb.h"
 #include "caffe/layers/base_conv_layer.hpp"
 
-//#define SHOW_FP32_OUT
 
-
+//#define SHOW_WEIGHT2INT8
+//#define SHOW_INPUT2INT8
+//#define SHOW_FP32COL
 namespace caffe {
 
 /**
@@ -91,7 +92,7 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
   Dtype input_temp_unit_sacle_1;
   void getFp32Weight();
   void computeInt8Weight(int*idx,const Dtype t1,const Dtype t2);
-  void computeInt8input(int*idx,const Dtype t1,const Dtype t2);
+  void computeInt8input (int*idx, const Dtype t1,const Dtype t2);
   // void computeInt8Weight(const Dtype t);
   // void computeInt8int(const Dtype t);
   // void computeInt8Weight();
@@ -185,7 +186,7 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
   int output_offset_;
 
   Blob<signed char> col_buffer_;
-#ifdef SHOW_FP32_OUT
+#ifdef SHOW_FP32COL
   Blob<Dtype> col_buffer_show_;
 #endif
   Blob<Dtype> bias_multiplier_;

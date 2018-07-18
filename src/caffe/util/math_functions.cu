@@ -45,6 +45,18 @@ void showDevice<signed char>(const signed char*data,int count)
     }
     free(show);
 }
+template <> 
+void showDevice<int>(const int*data,int count)
+{
+    int *show=(int*)malloc(count*sizeof(int));
+    cudaMemcpy(show,data,count*sizeof(int),cudaMemcpyDeviceToHost);
+    for(int i=0;i<count;i++)
+    {
+        std::cout<<show[i]<<" ";
+        if(i%10==9)std::cout <<std::endl;
+    }
+    free(show);
+}
 
 template <>
 void caffe_gpu_copy<float>(const int n, const float* x, float* y)
@@ -195,7 +207,7 @@ __global__ void caffe_gpu_quantize_nobias_kernel(const int n, const Dtype* fp32w
     }
     else
     {
-      int8weight[index]=round(fp32weights[index]/unit_scale);
+      int8weight[index]=round(fp32weights[index]*unit_scale);
     }
   }
 }

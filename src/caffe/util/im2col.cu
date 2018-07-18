@@ -49,11 +49,11 @@ __global__ void im2col_gpu_quanti_kernel(const int n, const Dtype* data_im,
           int pos = i * dilation_h * width + j * dilation_w;
           if(data_im_ptr[pos]<t1)
           {
-            *data_col_ptr = (-127);
+            *data_col_ptr = -127;
           }
           else if(data_im_ptr[pos]>t2)
           {
-            *data_col_ptr = (127);
+            *data_col_ptr = 127;
           }
           else
           {
@@ -83,21 +83,14 @@ void im2col_gpu_quantized(const Dtype* data_im, const int channels,
   int width_col = (width + 2 * pad_w -
       (dilation_w * (kernel_w - 1) + 1)) / stride_w + 1;
   int num_kernels = channels * height_col * width_col;
-
-
- 
-
   im2col_gpu_quanti_kernel<Dtype><<<CAFFE_GET_BLOCKS(num_kernels),
-                             CAFFE_CUDA_NUM_THREADS>>>(
-      num_kernels, data_im, height, width, kernel_h, kernel_w, pad_h,
-      pad_w, stride_h, stride_w, dilation_h, dilation_w, height_col,
-      width_col, data_col, t1,t2,unit_scale);
-
-
-
-//std::cout<<"----------------------col_buffer_----------------------"<<std::endl;
-      //showDevice2(data_col,50);
-      //printf("-----after   %p\n",data_col);
+                             CAFFE_CUDA_NUM_THREADS>>>(num_kernels, data_im, 
+                                                        height, width, kernel_h, kernel_w, 
+                                                        pad_h, pad_w, 
+                                                        stride_h, stride_w, 
+                                                        dilation_h, dilation_w, 
+                                                        height_col, width_col, 
+                                                        data_col, t1,t2,unit_scale);
   CUDA_POST_KERNEL_CHECK;
 }
 
