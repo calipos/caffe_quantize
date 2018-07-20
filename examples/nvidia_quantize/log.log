@@ -1,0 +1,349 @@
+I0719 16:24:07.533185 15663 caffe.cpp:217] Using GPUs 0
+I0719 16:24:10.717875 15663 caffe.cpp:222] GPU 0: GeForce GTX 1080 Ti
+I0719 16:24:11.315423 15663 solver.cpp:63] Initializing solver from parameters: 
+train_net: "/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/quantizedNet.prototxt"
+base_lr: 0.01
+display: 1
+max_iter: 400
+lr_policy: "multistep"
+gamma: 0.1
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 2500
+snapshot_prefix: "/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/"
+solver_mode: GPU
+device_id: 0
+debug_info: false
+train_state {
+  level: 0
+  stage: ""
+}
+snapshot_after_train: true
+test_initialization: false
+average_loss: 100
+stepvalue: 5000
+stepvalue: 30000
+stepvalue: 35000
+iter_size: 1
+type: "SGD"
+eval_type: "detection"
+ap_version: "11point"
+I0719 16:24:11.315662 15663 solver.cpp:96] Creating training net from train_net file: /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/quantizedNet.prototxt
+I0719 16:24:11.316438 15663 net.cpp:58] Initializing net from parameters: 
+name: "ssd304p_vehiclePeroson_train"
+state {
+  phase: TRAIN
+  level: 0
+  stage: ""
+}
+layer {
+  name: "data"
+  type: "AnnotatedData"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    mirror: true
+    mean_value: 128
+    mean_value: 128
+    mean_value: 128
+    resize_param {
+      prob: 1
+      resize_mode: WARP
+      height: 304
+      width: 304
+      interp_mode: LINEAR
+      interp_mode: AREA
+      interp_mode: NEAREST
+      interp_mode: CUBIC
+      interp_mode: LANCZOS4
+    }
+    emit_constraint {
+      emit_type: CENTER
+    }
+    distort_param {
+      brightness_prob: 0.5
+      brightness_delta: 32
+      contrast_prob: 0.5
+      contrast_lower: 0.5
+      contrast_upper: 1.5
+      hue_prob: 0.5
+      hue_delta: 18
+      saturation_prob: 0.5
+      saturation_lower: 0.5
+      saturation_upper: 1.5
+      random_order_prob: 0
+    }
+    expand_param {
+      prob: 0.5
+      max_expand_ratio: 1.2
+    }
+  }
+  data_param {
+    source: "/media/hdd/lbl_trainData/share/originVoc/lmdb/VOC2007_trainval_lmdb"
+    batch_size: 1
+    backend: LMDB
+  }
+  annotated_data_param {
+    batch_sampler {
+      max_sample: 1
+      max_trials: 1
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.8
+        max_aspect_ratio: 1.5
+      }
+      sample_constraint {
+        min_jaccard_overlap: 0.5
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.8
+        max_aspect_ratio: 1.5
+      }
+      sample_constraint {
+        min_jaccard_overlap: 0.7
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.8
+        max_aspect_ratio: 1.5
+      }
+      sample_constraint {
+        min_jaccard_overlap: 0.9
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    batch_sampler {
+      sampler {
+        min_scale: 0.3
+        max_scale: 1
+        min_aspect_ratio: 0.8
+        max_aspect_ratio: 1.5
+      }
+      sample_constraint {
+        max_jaccard_overlap: 1
+      }
+      max_sample: 1
+      max_trials: 50
+    }
+    label_map_file: "/media/hdd/lbl_trainData/share/originVoc/labelmap_voc.prototxt"
+  }
+}
+layer {
+  name: "stem1"
+  type: "Convolution"
+  bottom: "data"
+  top: "stem1"
+  convolution_param {
+    num_output: 32
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "stem1_int8"
+  type: "ConvInt8withKL"
+  bottom: "data"
+  bottom: "stem1"
+  bottom: "label"
+  top: "stem1_int8"
+  propagate_down: false
+  propagate_down: false
+  propagate_down: false
+  convolution_param {
+    num_output: 32
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+  conv_int8_withkl_param {
+    pre_test_batches: 10
+    input_adjust_segment_count: 10
+    input_adjust_each_count: 200
+    weight_adjust_segment_count: 50
+    weight_adjust_each_count: 200
+    weight_model_path: "/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.caffemodel"
+    layer_fp32_name: "stem1"
+  }
+}
+I0719 16:24:11.316586 15663 layer_factory.hpp:77] Creating layer data
+I0719 16:24:11.317270 15663 net.cpp:100] Creating Layer data
+I0719 16:24:11.317296 15663 net.cpp:408] data -> data
+I0719 16:24:11.317476 15663 net.cpp:408] data -> label
+I0719 16:24:11.319180 15689 db_lmdb.cpp:35] Opened lmdb /media/hdd/lbl_trainData/share/originVoc/lmdb/VOC2007_trainval_lmdb
+I0719 16:24:11.343729 15663 annotated_data_layer.cpp:62] output data size: 1,3,304,304
+I0719 16:24:11.351603 15663 net.cpp:150] Setting up data
+I0719 16:24:11.351645 15663 net.cpp:157] Top shape: 1 3 304 304 (277248)
+I0719 16:24:11.351657 15663 net.cpp:157] Top shape: 1 1 5 8 (40)
+I0719 16:24:11.351665 15663 net.cpp:165] Memory required for data: 1109152
+I0719 16:24:11.351681 15663 layer_factory.hpp:77] Creating layer data_data_0_split
+I0719 16:24:11.351709 15663 net.cpp:100] Creating Layer data_data_0_split
+I0719 16:24:11.351722 15663 net.cpp:434] data_data_0_split <- data
+I0719 16:24:11.351747 15663 net.cpp:408] data_data_0_split -> data_data_0_split_0
+I0719 16:24:11.351766 15663 net.cpp:408] data_data_0_split -> data_data_0_split_1
+I0719 16:24:11.351971 15663 net.cpp:150] Setting up data_data_0_split
+I0719 16:24:11.352010 15663 net.cpp:157] Top shape: 1 3 304 304 (277248)
+I0719 16:24:11.352021 15663 net.cpp:157] Top shape: 1 3 304 304 (277248)
+I0719 16:24:11.352030 15663 net.cpp:165] Memory required for data: 3327136
+I0719 16:24:11.352041 15663 layer_factory.hpp:77] Creating layer stem1
+I0719 16:24:11.352077 15663 net.cpp:100] Creating Layer stem1
+I0719 16:24:11.352088 15663 net.cpp:434] stem1 <- data_data_0_split_0
+I0719 16:24:11.352107 15663 net.cpp:408] stem1 -> stem1
+I0719 16:24:11.354681 15663 net.cpp:150] Setting up stem1
+I0719 16:24:11.354715 15663 net.cpp:157] Top shape: 1 32 152 152 (739328)
+I0719 16:24:11.354725 15663 net.cpp:165] Memory required for data: 6284448
+I0719 16:24:11.354753 15663 layer_factory.hpp:77] Creating layer stem1_int8
+I0719 16:24:11.354789 15663 net.cpp:100] Creating Layer stem1_int8
+I0719 16:24:11.354800 15663 net.cpp:434] stem1_int8 <- data_data_0_split_1
+I0719 16:24:11.354810 15663 net.cpp:434] stem1_int8 <- stem1
+I0719 16:24:11.354820 15663 net.cpp:434] stem1_int8 <- label
+I0719 16:24:11.354836 15663 net.cpp:408] stem1_int8 -> stem1_int8
+I0719 16:24:11.355084 15663 convInt8_withKL_layer.cpp:192]  **  the weights of stem1 will be extracted from /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.caffemodel
+I0719 16:24:11.355393 15663 net.cpp:150] Setting up stem1_int8
+I0719 16:24:11.355410 15663 net.cpp:157] Top shape: 1 (1)
+I0719 16:24:11.355417 15663 net.cpp:165] Memory required for data: 6284452
+I0719 16:24:11.355433 15663 net.cpp:228] stem1_int8 does not need backward computation.
+I0719 16:24:11.355444 15663 net.cpp:228] stem1 does not need backward computation.
+I0719 16:24:11.355453 15663 net.cpp:228] data_data_0_split does not need backward computation.
+I0719 16:24:11.355463 15663 net.cpp:228] data does not need backward computation.
+I0719 16:24:11.355470 15663 net.cpp:270] This network produces output stem1_int8
+I0719 16:24:11.355489 15663 net.cpp:283] Network initialization done.
+I0719 16:24:11.355554 15663 solver.cpp:75] Solver scaffolding done.
+I0719 16:24:11.355717 15663 caffe.cpp:155] Finetuning from /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.caffemodel
+I0719 16:24:11.355852 15663 net.cpp:761] Ignoring source layer input
+I0719 16:24:11.355891 15663 caffe.cpp:251] Starting Optimization
+I0719 16:24:11.355902 15663 solver.cpp:294] Solving ssd304p_vehiclePeroson_train
+I0719 16:24:11.355911 15663 solver.cpp:295] Learning Rate Policy: multistep
+I0719 16:24:11.356606 15663 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0719 16:24:11.385208 15663 convInt8_withKL_layer.cpp:20] Copying source layer stem1. source_layer.blobs_size()= 1
+I0719 16:24:11.385440 15663 convInt8_withKL_layer.cu:158] 0.333284		-0.331954
+I0719 16:24:11.386209 15663 convInt8_withKL_layer.cu:177] input  region : 123		-128
+I0719 16:24:11.386231 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:11.386240 15663 convInt8_withKL_layer.cu:179] 1 < 10
+I0719 16:24:11.386253 15663 solver.cpp:243] Iteration 0, loss = 0
+I0719 16:24:11.386310 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:11.386337 15663 sgd_solver.cpp:137] Iteration 0, lr = 0.01
+I0719 16:24:11.386353 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:11.386363 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:11.466050 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:11.466094 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:11.466104 15663 convInt8_withKL_layer.cu:179] 2 < 10
+I0719 16:24:11.466112 15663 solver.cpp:243] Iteration 1, loss = 0
+I0719 16:24:11.466122 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:11.466133 15663 sgd_solver.cpp:137] Iteration 1, lr = 0.01
+I0719 16:24:11.466156 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:11.466168 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:11.495395 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:11.495436 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:11.495450 15663 convInt8_withKL_layer.cu:179] 3 < 10
+I0719 16:24:11.495458 15663 solver.cpp:243] Iteration 2, loss = 0
+I0719 16:24:11.495471 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:11.495482 15663 sgd_solver.cpp:137] Iteration 2, lr = 0.01
+I0719 16:24:11.495496 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:11.495508 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:11.672852 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:11.672895 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:11.672906 15663 convInt8_withKL_layer.cu:179] 4 < 10
+I0719 16:24:11.672914 15663 solver.cpp:243] Iteration 3, loss = 0
+I0719 16:24:11.672924 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:11.672935 15663 sgd_solver.cpp:137] Iteration 3, lr = 0.01
+I0719 16:24:11.672947 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:11.672956 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:11.701437 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:11.701474 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:11.701484 15663 convInt8_withKL_layer.cu:179] 5 < 10
+I0719 16:24:11.701493 15663 solver.cpp:243] Iteration 4, loss = 0
+I0719 16:24:11.701504 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:11.701515 15663 sgd_solver.cpp:137] Iteration 4, lr = 0.01
+I0719 16:24:11.701527 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:11.701535 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:11.787263 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:11.787305 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:11.787318 15663 convInt8_withKL_layer.cu:179] 6 < 10
+I0719 16:24:11.787326 15663 solver.cpp:243] Iteration 5, loss = 0
+I0719 16:24:11.787338 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:11.787349 15663 sgd_solver.cpp:137] Iteration 5, lr = 0.01
+I0719 16:24:11.787364 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:11.787376 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:11.882704 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:11.882746 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:11.882758 15663 convInt8_withKL_layer.cu:179] 7 < 10
+I0719 16:24:11.882767 15663 solver.cpp:243] Iteration 6, loss = 0
+I0719 16:24:11.882778 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:11.882791 15663 sgd_solver.cpp:137] Iteration 6, lr = 0.01
+I0719 16:24:11.882835 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:11.882848 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:12.039021 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:12.039069 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:12.039081 15663 convInt8_withKL_layer.cu:179] 8 < 10
+I0719 16:24:12.039090 15663 solver.cpp:243] Iteration 7, loss = 0
+I0719 16:24:12.039101 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:12.039113 15663 sgd_solver.cpp:137] Iteration 7, lr = 0.01
+I0719 16:24:12.039129 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:12.039141 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:12.052913 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:12.052953 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:12.052965 15663 convInt8_withKL_layer.cu:179] 9 < 10
+I0719 16:24:12.052974 15663 solver.cpp:243] Iteration 8, loss = 0
+I0719 16:24:12.052985 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0719 16:24:12.052997 15663 sgd_solver.cpp:137] Iteration 8, lr = 0.01
+I0719 16:24:12.053015 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0719 16:24:12.053026 15663 sgd_solver.cpp:140] [1] 1 8 (8)
+I0719 16:24:12.090440 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
+I0719 16:24:12.090481 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
+I0719 16:24:12.090493 15663 convInt8_withKL_layer.cu:179] 10 < 10
+I0719 16:24:12.090589 15663 convInt8_withKL_layer.cu:41] weight_temp_unit_sacle = 0.00261381;  weight_temp_unit_sacle_1 = 382.584
+I0719 16:24:12.090612 15663 convInt8_withKL_layer.cu:57] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0719 16:24:12.091406 15663 convInt8_withKL_layer.cu:109] 27 152 152 (623808)
+I0719 16:24:12.091485 15663 convInt8_withKL_layer.cu:132] caffe_gpu_iGemm PARAM : 32 23104 27
+F0719 16:24:12.092135 15663 math_functions.cu:239] Check failed: status == CUBLAS_STATUS_SUCCESS (15 vs. 0)  CUBLAS_STATUS_NOT_SUPPORTED
+*** Check failure stack trace: ***
+    @     0x7f8cc43aadaa  (unknown)
+    @     0x7f8cc43aace4  (unknown)
+    @     0x7f8cc43aa6e6  (unknown)
+    @     0x7f8cc43ad687  (unknown)
+    @     0x7f8cc4c73e29  caffe::caffe_gpu_iGemm()
+    @     0x7f8cc4cc23b6  caffe::ConvInt8withKLLayer<>::forward_gpu_gemm()
+    @     0x7f8cc4cc27cf  caffe::ConvInt8withKLLayer<>::Forward_gpu()
+    @     0x7f8cc4c56e85  caffe::Net<>::ForwardFromTo()
+    @     0x7f8cc4c571f7  caffe::Net<>::Forward()
+    @     0x7f8cc4c3bc08  caffe::Solver<>::Step()
+    @     0x7f8cc4c3c2fe  caffe::Solver<>::Solve()
+    @           0x408f53  train()
+    @           0x40631c  main
+    @     0x7f8cc33b6f45  (unknown)
+    @           0x406b7b  (unknown)
+    @              (nil)  (unknown)
+ ** On entry to GEMM_EX  parameter number 12 had an illegal value

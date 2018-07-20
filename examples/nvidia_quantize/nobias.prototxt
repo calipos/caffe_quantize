@@ -1,0 +1,27 @@
+name: "ssd304p_vehiclePeroson_deploy"
+input: "data"
+input_shape {
+  dim: 1
+  dim: 3
+  dim: 304
+  dim: 304
+}
+layer {
+  name: "stem1"
+  type: "Convolution"
+  bottom: "data"
+  top: "stem1"
+  convolution_param {
+    bias_term : false
+    num_output: 32
+    pad: 1
+    kernel_size: 3
+    stride: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
