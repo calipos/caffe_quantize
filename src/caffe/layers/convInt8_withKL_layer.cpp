@@ -29,11 +29,15 @@ void ConvInt8withKLLayer<Dtype>::getFp32Weight()
           source_blob.FromProto(source_layer.blobs(1), true);
           CHECK(this->blobs_[1]->count()==source_blob.count());
           this->blobs_[1]->FromProto(source_layer.blobs(1), true);
+		  //LOG(INFO)<<this->blobs_[1]->cpu_data()[0];
+		  //LOG(INFO)<<this->blobs_[1]->cpu_data()[1];
         }
         else
         {
           CHECK(this->blobs_[1]->ShapeEquals(source_layer.blobs(1)))<<"this->blobs_[1]="<<this->blobs_[1]->shape_string()<<"   and source_layer.blobs(1)= "<<source_layer.blobs(1).num()<<" "<<source_layer.blobs(1).channels()<<" "<<source_layer.blobs(1).height()<<" "<<source_layer.blobs(1).width()<<" ";
           this->blobs_[1]->FromProto(source_layer.blobs(1), false);
+		  //LOG(INFO)<<this->blobs_[1]->cpu_data()[0];
+		  //LOG(INFO)<<this->blobs_[1]->cpu_data()[1];
         }
       }      
       weightFp32HasExtracted = true;

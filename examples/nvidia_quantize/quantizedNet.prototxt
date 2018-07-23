@@ -117,9 +117,9 @@ layer {
   convolution_param {
     bias_term : false
     num_output: 32
-    pad: 1
+    pad: 0
     kernel_size: 3
-    stride: 2
+    stride: 1
     weight_filler {
       type: "xavier"
     }
@@ -143,9 +143,9 @@ layer {
   convolution_param {
     bias_term : false
     num_output: 32
-    pad: 1
+    pad: 0
     kernel_size: 3
-    stride: 2
+    stride: 1
     weight_filler {
       type: "xavier"
     }

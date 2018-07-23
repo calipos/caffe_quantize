@@ -142,6 +142,7 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
         im2col_1x1_gpu_quantized(col_buffer_.count(), input, col_buffer_.mutable_gpu_data(), this->blobs_[0].get()->mutable_cpu_data()[2],this->blobs_[0].get()->mutable_cpu_data()[3],this->input_temp_unit_sacle);
         col_buff = col_buffer_.gpu_data();
   }
+  LOG(INFO)<<"IM2COL HAS BEEN DONE";
   	int newK=0;
 	int newN=0;
 	signed char *d_A_new, *d_B_new;
@@ -151,14 +152,17 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
 	int bigger_count1=m*newK;
 	int bigger_count2=newK*newN;
 	int bigger_count=m*newN;
+	LOG(INFO)<<"needReshape = "<<needReshape<<" AND (newN,newK)=( "<<newN<<", "<<newK<<" ) THE OLD = ("<<conv_out_spatial_dim_<<", "<<kernel_dim_<<" )";
 	if(needReshape>0) 
 	{
 		(cudaMallocManaged(&d_A_new, m * newK * sizeof(signed char)));
 		(cudaMallocManaged(&d_B_new, newK * newN * sizeof(signed char)));
 		(cudaMallocManaged(&d_C_32_new, m * newN * sizeof(signed char)));
+		LOG(INFO)<<"cudaMallocManaged DONE";
 	}
 	
-  for (int g = 0; g < group_; ++g) {
+  for (int g = 0; g < group_; ++g) 
+  {
 	if(needReshape>0) 
 	{  
 	  	_copy_Data<<<CAFFE_GET_BLOCKS(bigger_count1), CAFFE_CUDA_NUM_THREADS>>>(bigger_count1,weights + weight_offset_ * g,d_A_new,m,kernel_dim_,m,newK);
@@ -174,15 +178,14 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
         1, weights + weight_offset_ * g, col_buff + col_offset_ * g,
         0, int32out.mutable_gpu_data() + output_offset_ * g);
 	}
-	}
+  }
   if(needReshape>0) 
-	{ 
-		cudaFree(d_A_new);
-		cudaFree(d_B_new);
-		cudaFree(d_C_32_new);
-	}
-    //std::cout<<"*************int32out*************"<<std::endl; 
-    //showDevice(int32out.gpu_data(),50);
+  {  
+	cudaFree(d_A_new);
+	cudaFree(d_B_new);
+	cudaFree(d_C_32_new);
+  }
+
     
   int2Dtype(int32out.count(),int32out.gpu_data(),output,this->input_temp_unit_sacle*this->weight_temp_unit_sacle);
 
@@ -235,12 +238,18 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     for (int n = 0; n < this->num_; ++n) {
       this->forward_gpu_gemm(bottom_data + n * this->bottom_dim_, weight,
           top_data + n * this->top_dim_);
+		  LOG(INFO)<<"forward_gpu_gemm DONE";
 
       if (this->bias_term_) {
+		  LOG(INFO)<<"bias_term_ BEGIN";
+		  LOG(INFO)<<"this->blobs_[1]->SHAPE_STRING = "<<this->blobs_[1]->shape_string();
+		  LOG(INFO)<<top_result.shape_string();
+		  LOG(INFO)<<this->blobs_[1]->cpu_data()[1];
         const Dtype* bias = this->blobs_[1]->gpu_data();
           caffe_gpu_gemm<Dtype>(CblasNoTrans, CblasNoTrans, num_output_,
                   out_spatial_dim_, 1, (Dtype)1., bias, bias_multiplier_.gpu_data(),
                   (Dtype)1., top_data + n * this->top_dim_);
+		LOG(INFO)<<"bias_term_ DONE";
       }
     }
 
@@ -253,12 +262,12 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     // std::cout<<"*************col_8*************"<<std::endl; 
     // showDevice(col_buffer_.gpu_data(),50);
     // std::cout<<"--**"<<std::endl; 
-    // std::cout<<"*************int8 result*************"<<std::endl; 
-    // showDevice(top_result.gpu_data(),50);
-    // std::cout<<"*************fp32 result*************"<<std::endl; 
-    // showDevice(bottom[1]->gpu_data(),50);
-    // std::cout<<"============================"<<std::endl; 
-    //exit(0);
+    std::cout<<"*************int8 result*************"<<std::endl; 
+    //showDevice(top_result.cpu_data(),50);
+    std::cout<<"*************fp32 result*************"<<std::endl; 
+    //showDevice(bottom[1]->cpu_data(),50);
+    std::cout<<"============================"<<std::endl; 
+    exit(0);
 }
 
 template <typename Dtype>

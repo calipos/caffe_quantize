@@ -19,6 +19,8 @@ nobias_net = caffe.Net("/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examp
 stem1Layer = nobias_net._layer_by_name("stem1")
 print len(stem1Layer.blobs)
 print (stem1Layer.blobs[0].shape_string())
+# print (stem1Layer.blobs[1].data[0])
+# print (stem1Layer.blobs[1].data[1])
 nobias_net.save("nobias.caffemodel")
 exit(0)
 
