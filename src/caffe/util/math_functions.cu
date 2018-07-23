@@ -58,6 +58,45 @@ void showDevice<int>(const int*data,int count)
     free(show);
 }
 
+
+//N是大矩阵的数量
+__global__ void _copy_Data(int N, const signed char*dataIn, signed char*dataOut, int row, int col, int newRow, int newCol)
+{
+	//dataIn1  : m*k
+	//dataIn2  : n*k
+	//dataOut1 : m*newK
+	//dataOut2 : newN*newK
+	CUDA_KERNEL_LOOP(idx,N){
+		int i = idx / newCol;
+		int j = idx % newCol;
+		if(i>=row || j>=col)  dataOut[idx]=0;
+		else 
+		{
+			int pos = j+i*col;
+			dataOut[idx] = dataIn[pos];			
+		}
+	}
+}
+
+//N是大矩阵的数量
+__global__ void _copy_Data_back(int N, int*dataIn, int*dataOut, int row, int col, int newRow, int newCol)
+{
+	//dataIn1  : m*k
+	//dataIn2  : n*k
+	//dataOut1 : m*newK
+	//dataOut2 : newN*newK
+	CUDA_KERNEL_LOOP(idx,N){
+		int i = idx / newCol;
+		int j = idx % newCol;
+		if(i>=row || j>=col)  continue;
+		else 
+		{
+			int pos = j+i*col;
+			dataIn[idx] = dataOut[pos];			
+		}
+	}
+}
+
 template <>
 void caffe_gpu_copy<float>(const int n, const float* x, float* y)
 {

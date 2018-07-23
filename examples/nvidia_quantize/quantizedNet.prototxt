@@ -13,7 +13,7 @@ layer {
     mean_value: 128.0
     mean_value: 128.0
     resize_param {
-      prob: 1.0
+      prob: 1.0 
       resize_mode: WARP
       height: 304
       width: 304
@@ -115,6 +115,7 @@ layer {
   bottom: "data"
   top: "stem1"
   convolution_param {
+    bias_term : false
     num_output: 32
     pad: 1
     kernel_size: 3
@@ -140,6 +141,7 @@ layer {
   bottom: "label"
   top: "stem1_int8"
   convolution_param {
+    bias_term : false
     num_output: 32
     pad: 1
     kernel_size: 3
@@ -152,7 +154,7 @@ layer {
     }
   }
   conv_int8_withkl_param {
-    weight_model_path : "/media/hdd/lbl_trainData/dataBase/ssdpelee/pelee_nobn.caffemodel"
+    weight_model_path : "/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.caffemodel"
     layer_fp32_name : "stem1"
     pre_test_batches : 10
     input_adjust_segment_count : 10
@@ -161,20 +163,5 @@ layer {
     weight_adjust_each_count : 200
     
     
-  }
-}
-layer {
-  name: "dummyEnd"
-  type: "InnerProduct"
-  bottom: "stem1_int8"
-  top: "dummyEnd"
-  inner_product_param {
-    num_output: 1
-    weight_filler {
-      type: "xavier"
-    }
-    bias_filler {
-      type: "constant"
-    }
   }
 }

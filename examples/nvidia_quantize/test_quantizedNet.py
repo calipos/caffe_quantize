@@ -14,13 +14,13 @@ if osp.join(CAFFE_ROOT,'python') not in sys.path:
 import caffe
 
 
-# caffe.set_mode_gpu()
-# pelee_net = caffe.Net("/media/hdd/lbl_trainData/dataBase/ssdpelee/pelee_nobn.prototxt","/media/hdd/lbl_trainData/dataBase/ssdpelee/pelee_nobn.caffemodel", caffe.TEST)
-# stem1Layer = pelee_net._layer_by_name("stem1")
-# print len(stem1Layer.blobs)
-# print (stem1Layer.blobs[0].shape_string())
-# print (stem1Layer.blobs[1].shape_string())
-# exit(0)
+caffe.set_mode_gpu()
+nobias_net = caffe.Net("/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.prototxt", caffe.TEST)
+stem1Layer = nobias_net._layer_by_name("stem1")
+print len(stem1Layer.blobs)
+print (stem1Layer.blobs[0].shape_string())
+nobias_net.save("nobias.caffemodel")
+exit(0)
 
 caffe.set_mode_gpu()
 original_net = caffe.Net('./quantizedNet.prototxt', caffe.TEST)

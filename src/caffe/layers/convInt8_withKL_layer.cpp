@@ -232,10 +232,8 @@ void ConvInt8withKLLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     shared_ptr<Filler<Dtype> > bias_filler(GetFiller<Dtype>(this->layer_param_.convolution_param().bias_filler()));
     bias_filler->Fill(this->blobs_[1].get());
   }
-  kernel_dim_ = this->blobs_[0]->count(1);
+  kernel_dim_ = this->blobs_int8_[0]->count(1);
   weight_offset_ = conv_out_channels_ * kernel_dim_ / group_;
-  CHECK(conv_out_channels_/group_%4==0)<<conv_out_channels_<<" / "<<group_;
-  CHECK(kernel_dim_%4==0)<<kernel_dim_;
 }
 
 template <typename Dtype>
@@ -246,13 +244,7 @@ void ConvInt8withKLLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
         CHECK_EQ(bottom[0]->num_axes(), first_spatial_axis + num_spatial_axes_)<< "bottom num_axes may not change.";
         num_ = bottom[0]->count(0, channel_axis_);
         CHECK_EQ(bottom[0]->shape(channel_axis_), channels_)<< "Input size incompatible with convolution kernel.";
-        // TODO: generalize to handle inputs of different shapes.
-        // for (int bottom_id = 1; bottom_id < bottom.size(); ++bottom_id) 
-        // {
-          // CHECK(bottom[0]->shape() == bottom[bottom_id]->shape())
-              // << "All inputs must have the same shape.";
-        // }
-        // Shape the tops.
+
         bottom_shape_ = &bottom[0]->shape();
         compute_output_shape();
         vector<int> top_shape(bottom[0]->shape().begin(),
@@ -262,9 +254,16 @@ void ConvInt8withKLLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
         {
           top_shape.push_back(output_shape_[i]);
         }
-        top[0]->Reshape(top_shape);
-        int32out.Reshape(top_shape);
-        conv_out_spatial_dim_ = top[0]->count(first_spatial_axis);
+        top[0]->Reshape(std::vector<int>({1}));
+        top_result.Reshape(top_shape);
+        CHECK(top_shape.size()==4)<<"only support 4dim!";
+
+          int32out.Reshape(top_shape);
+        
+        conv_out_spatial_dim_ = top_result.count(first_spatial_axis);
+        
+
+        
         col_offset_ = kernel_dim_ * conv_out_spatial_dim_;
         output_offset_ = conv_out_channels_ * conv_out_spatial_dim_ / group_;
         // Setup input dimensions (conv_input_shape_).
@@ -285,26 +284,27 @@ void ConvInt8withKLLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
           col_buffer_shape_.push_back(output_shape_[i]);
         }
         col_buffer_.Reshape(col_buffer_shape_);
-        if(is_1x1_) CHECK(col_buffer_.count()==bottom[0]->count())<<col_buffer_.count()<<" : "<<bottom[0]->count();
+        //if(is_1x1_) CHECK(col_buffer_.count()==bottom[0]->count())<<col_buffer_.count()<<" : "<<bottom[0]->count();
 #ifdef SHOW_FP32COL
         col_buffer_show_.Reshape(col_buffer_shape_);
 #endif
         //************************************
         bottom_dim_ = bottom[0]->count(channel_axis_);
-        top_dim_ = top[0]->count(channel_axis_);
+        top_dim_ = top_result.count(channel_axis_);
         num_kernels_im2col_ = conv_in_channels_ * conv_out_spatial_dim_;
         num_kernels_col2im_ = reverse_dimensions() ? top_dim_ : bottom_dim_;
         // Set up the all ones "bias multiplier" for adding biases by BLAS
-        out_spatial_dim_ = top[0]->count(first_spatial_axis);
+        out_spatial_dim_ = top_result.count(first_spatial_axis);
         if (bias_term_) {
           vector<int> bias_multiplier_shape(1, out_spatial_dim_);
           bias_multiplier_.Reshape(bias_multiplier_shape);
           caffe_set(bias_multiplier_.count(), Dtype(1),
               bias_multiplier_.mutable_cpu_data());
         }
-        CHECK(conv_out_spatial_dim_%4==0)<<conv_out_spatial_dim_<<" - "<<top[0]->shape_string();
+        CHECK(conv_out_spatial_dim_%4==0)<<conv_out_spatial_dim_<<" - "<<top_result.shape_string();
         /*******************************************************************/
         inputInt8.Reshape(col_buffer_shape_);
+        LOG(INFO)<<"caffe_gpu_iGemm PARAM : "<<conv_out_channels_ / group_<<" "<<conv_out_spatial_dim_<<" "<<kernel_dim_;
 
 }
 

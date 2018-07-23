@@ -144,6 +144,9 @@ void caffe_cpu_scale(const int n, const Dtype alpha, const Dtype *x, Dtype* y);
 
 #ifndef CPU_ONLY  // GPU
 
+__global__ void _copy_Data(int N, const signed char*dataIn, signed char*dataOut, int row, int col, int newRow, int newCol);
+__global__ void _copy_Data_back(int N, int*dataIn, int*dataOut, int row, int col, int newRow, int newCol);
+
 void caffe_gpu_iGemm(const CBLAS_TRANSPOSE TransA,
     const CBLAS_TRANSPOSE TransB, const int M, const int N, const int K,
     const int alpha, const signed char* A, const signed char* B, const int beta,

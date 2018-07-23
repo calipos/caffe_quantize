@@ -8,6 +8,19 @@ using std::cout;
 using std::endl;
 
 
+int getNewDim(int n, int k,int*newN,int*newK)
+{
+	if(n%4==0 && k%4==0)
+	{
+		*newN = n;
+		*newK = k;
+		return 0;
+	}	
+	*newN = n%4==0? n : (n/4+1)*4;
+	*newK = k%4==0? k : (k/4+1)*4;
+	return 1;
+}
+
 
 template <typename Dtype>
 void ConvInt8withKLLayer<Dtype>::computeInt8Weight(int *idx,const Dtype t1,const Dtype t2)
@@ -102,10 +115,12 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
         std::cout<<"--------------fp32 col_buffer_show_---------------"<<std::endl; 
         showDevice(col_buffer_show_.gpu_data(),500); 
    }
-   exit(0);
 #endif
   const signed char* col_buff;
   if (!is_1x1_) {
+    
+    LOG(INFO)<<col_buffer_.shape_string();
+    
           CHECK( num_spatial_axes_ == 2);
           im2col_gpu_quantized(input, conv_in_channels_, conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
                                                     kernel_shape_.cpu_data()[0], kernel_shape_.cpu_data()[1],
@@ -127,15 +142,50 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
         im2col_1x1_gpu_quantized(col_buffer_.count(), input, col_buffer_.mutable_gpu_data(), this->blobs_[0].get()->mutable_cpu_data()[2],this->blobs_[0].get()->mutable_cpu_data()[3],this->input_temp_unit_sacle);
         col_buff = col_buffer_.gpu_data();
   }
-
+  	int newK=0;
+	int newN=0;
+	signed char *d_A_new, *d_B_new;
+	int * d_C_32_new;
+	int m = conv_out_channels_ / group_;
+	int needReshape = getNewDim(conv_out_spatial_dim_,kernel_dim_,&newN,&newK);
+	int bigger_count1=m*newK;
+	int bigger_count2=newK*newN;
+	int bigger_count=m*newN;
+	if(needReshape>0) 
+	{
+		(cudaMallocManaged(&d_A_new, m * newK * sizeof(signed char)));
+		(cudaMallocManaged(&d_B_new, newK * newN * sizeof(signed char)));
+		(cudaMallocManaged(&d_C_32_new, m * newN * sizeof(signed char)));
+	}
+	
   for (int g = 0; g < group_; ++g) {
-    caffe_gpu_iGemm(CblasNoTrans, CblasNoTrans, conv_out_channels_ /
-        group_, conv_out_spatial_dim_, kernel_dim_,
+	if(needReshape>0) 
+	{  
+	  	_copy_Data<<<CAFFE_GET_BLOCKS(bigger_count1), CAFFE_CUDA_NUM_THREADS>>>(bigger_count1,weights + weight_offset_ * g,d_A_new,m,kernel_dim_,m,newK);
+		_copy_Data<<<CAFFE_GET_BLOCKS(bigger_count2), CAFFE_CUDA_NUM_THREADS>>>(bigger_count2,col_buff + col_offset_ * g,d_B_new,kernel_dim_,conv_out_spatial_dim_,newK,newN);
+		caffe_gpu_iGemm(CblasNoTrans, CblasNoTrans, m, newN, newK,
+        1, d_A_new, d_B_new,
+        0, d_C_32_new);
+		_copy_Data_back<<<CAFFE_GET_BLOCKS(bigger_count), CAFFE_CUDA_NUM_THREADS>>>(bigger_count,int32out.mutable_gpu_data() + output_offset_ * g,d_C_32_new,m,conv_out_spatial_dim_,m,newN);
+	}  
+	else
+	{
+		caffe_gpu_iGemm(CblasNoTrans, CblasNoTrans, m, newN, newK,
         1, weights + weight_offset_ * g, col_buff + col_offset_ * g,
         0, int32out.mutable_gpu_data() + output_offset_ * g);
-  }
+	}
+	}
+  if(needReshape>0) 
+	{ 
+		cudaFree(d_A_new);
+		cudaFree(d_B_new);
+		cudaFree(d_C_32_new);
+	}
+    //std::cout<<"*************int32out*************"<<std::endl; 
+    //showDevice(int32out.gpu_data(),50);
+    
+  int2Dtype(int32out.count(),int32out.gpu_data(),output,this->input_temp_unit_sacle*this->weight_temp_unit_sacle);
 
-  int2Dtype(int32out.count(),int32out.gpu_data(),output,this->input_temp_unit_sacle);
 }
 template <typename Dtype>
 void ConvInt8withKLLayer<Dtype>::forward_gpu_bias(Dtype* output, const Dtype* bias)
@@ -145,6 +195,7 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_bias(Dtype* output, const Dtype* bi
 template <typename Dtype>
 void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
+        
     if(!weightFp32HasExtracted)  
     {
         getFp32Weight();
@@ -180,7 +231,7 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
   const signed char* weight = this->blobs_int8_[0]->gpu_data();
   //for (int i = 0; i < bottom.size(); ++i) {
     const Dtype* bottom_data = bottom[0]->gpu_data();
-    Dtype* top_data = top[0]->mutable_gpu_data();
+    Dtype* top_data = top_result.mutable_gpu_data();
     for (int n = 0; n < this->num_; ++n) {
       this->forward_gpu_gemm(bottom_data + n * this->bottom_dim_, weight,
           top_data + n * this->top_dim_);
@@ -193,11 +244,21 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       }
     }
 
-    std::cout<<"--**"<<std::endl; 
-    std::cout<<"*************int8 result*************"<<std::endl; 
-    showDevice(top[0]->gpu_data(),100);
-    std::cout<<"*************fp32 result*************"<<std::endl; 
-    showDevice(bottom[1]->gpu_data(),100);
+    //std::cout<<"*************weight32*************"<<std::endl; 
+    // showDevice(weightFp32.gpu_data(),10);
+    // std::cout<<"*************weight8*************"<<std::endl; 
+    // showDevice(this->blobs_int8_[0]->gpu_data(),10);
+    // std::cout<<"*************input32*************"<<std::endl; 
+    // showDevice(bottom[0]->gpu_data(),50);
+    // std::cout<<"*************col_8*************"<<std::endl; 
+    // showDevice(col_buffer_.gpu_data(),50);
+    // std::cout<<"--**"<<std::endl; 
+    // std::cout<<"*************int8 result*************"<<std::endl; 
+    // showDevice(top_result.gpu_data(),50);
+    // std::cout<<"*************fp32 result*************"<<std::endl; 
+    // showDevice(bottom[1]->gpu_data(),50);
+    // std::cout<<"============================"<<std::endl; 
+    //exit(0);
 }
 
 template <typename Dtype>

@@ -186,6 +186,7 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
   int output_offset_;
 
   Blob<signed char> col_buffer_;
+  Blob<Dtype> top_result;
 #ifdef SHOW_FP32COL
   Blob<Dtype> col_buffer_show_;
 #endif
