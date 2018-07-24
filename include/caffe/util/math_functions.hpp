@@ -257,6 +257,7 @@ template<typename Dtype>
 void caffe_gpu_clipByValue_grad(const int n, const Dtype* diff,const Dtype* old_weight, Dtype* y);
 template<typename Dtype>
 void showDevice(const Dtype*data,int count);
+
 template<typename Dtype>
 void getMaxAndMIn(int n, const Dtype*data, Dtype*max, Dtype*min);
   

@@ -73,6 +73,7 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
   // 3 :Dtype weight_min;
   // 4 :Dtype weight_max;
   Blob<Dtype> maxAndMin;
+  
   Dtype input_scale_t1;
   Dtype input_scale_t2;
   bool isFirstGetMaxMin;
@@ -117,6 +118,8 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
 
   bool reverse_dimensions(){return false;};
   void compute_output_shape();
+
+  Dtype figureRelativeEntropy(Blob<Dtype>*int8Blob, Blob<Dtype>*gtBlob);
   Blob<int> kernel_shape_;
   Blob<int> stride_;
   Blob<int> pad_;
@@ -187,6 +190,7 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
 
   Blob<signed char> col_buffer_;
   Blob<Dtype> top_result;
+  Blob<Dtype> relativeEntropyBlob;
 #ifdef SHOW_FP32COL
   Blob<Dtype> col_buffer_show_;
 #endif

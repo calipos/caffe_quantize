@@ -118,8 +118,7 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
 #endif
   const signed char* col_buff;
   if (!is_1x1_) {
-    
-    LOG(INFO)<<col_buffer_.shape_string();
+
     
           CHECK( num_spatial_axes_ == 2);
           im2col_gpu_quantized(input, conv_in_channels_, conv_input_shape_.cpu_data()[1], conv_input_shape_.cpu_data()[2],
@@ -142,7 +141,6 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
         im2col_1x1_gpu_quantized(col_buffer_.count(), input, col_buffer_.mutable_gpu_data(), this->blobs_[0].get()->mutable_cpu_data()[2],this->blobs_[0].get()->mutable_cpu_data()[3],this->input_temp_unit_sacle);
         col_buff = col_buffer_.gpu_data();
   }
-  LOG(INFO)<<"IM2COL HAS BEEN DONE";
   	int newK=0;
 	int newN=0;
 	signed char *d_A_new, *d_B_new;
@@ -158,7 +156,6 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
 		(cudaMalloc(&d_A_new, m * newK * sizeof(signed char)));
 		(cudaMalloc(&d_B_new, newK * newN * sizeof(signed char)));
 		(cudaMalloc(&d_C_32_new, m * newN * sizeof(signed char)));
-		LOG(INFO)<<"cudaMalloc DONE";
 	}
 	
   for (int g = 0; g < group_; ++g) 
@@ -195,6 +192,57 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_bias(Dtype* output, const Dtype* bi
 {}
 
 
+__global__ void getRelativeEntropy(int N, const float*data, const float*gtData,float*outData, float relativeLog)
+{
+	CUDA_KERNEL_LOOP(idx,N){
+		//outData[idx] = 1.0;//gtData[idx]*(log(data[idx]/gtData[idx])-relativeLog);
+		outData[idx] = gtData[idx]*(log(data[idx]/gtData[idx])-relativeLog);
+	}
+}
+__global__ void getRelativeEntropy(int N, const double*data, const double*gtData,double*outData, double relativeLog)
+{
+	CUDA_KERNEL_LOOP(idx,N){
+		outData[idx] = gtData[idx]*(log(data[idx]/gtData[idx])-relativeLog);
+	}
+}
+
+template <typename Dtype>
+Dtype ConvInt8withKLLayer<Dtype>::figureRelativeEntropy(Blob<Dtype>*int8Blob, Blob<Dtype>*gtBlob)
+{
+	
+	CHECK(int8Blob->count() == gtBlob->count());
+	CHECK(int8Blob->count() == this->relativeEntropyBlob.count());
+	
+	caffe_gpu_abs(int8Blob->count(), int8Blob->gpu_data(), int8Blob->mutable_gpu_data());
+	caffe_gpu_abs(int8Blob->count(), gtBlob->gpu_data(), gtBlob->mutable_gpu_data());
+	LOG(INFO)<<int8Blob->asum_data();//有同步问题！！！！
+	Dtype int8Sum = int8Blob->asum_data();
+	Dtype gtSum = gtBlob->asum_data();
+	Dtype relativeLog = log(gtSum/int8Sum);
+	LOG(INFO)<<int8Sum;
+	//return 0;
+	int _count=int8Blob->count();
+	getRelativeEntropy<<<CAFFE_GET_BLOCKS(_count), CAFFE_CUDA_NUM_THREADS>>>(
+      int8Blob->count(), int8Blob->gpu_data(), gtBlob->gpu_data(), this->relativeEntropyBlob.mutable_gpu_data(),relativeLog);
+
+	Dtype entropy_=-1;
+	LOG(INFO)<<int8Blob->count();
+	LOG(INFO)<<this->relativeEntropyBlob.count();
+	LOG(INFO)<<relativeLog;
+    //caffe_gpu_asum(relativeEntropyBlob.count(), relativeEntropyBlob.gpu_data(), &(relativeEntropyBlob.mutable_gpu_diff()[0]));
+	
+	//showDevice(this->relativeEntropyBlob.gpu_data(),50);
+	//showDevice(this->relativeEntropyBlob.gpu_data(),int8Blob->count());
+	
+	LOG(INFO)<<this->relativeEntropyBlob.asum_data();
+	exit(0);
+	//LOG(INFO)<<gtSum;
+	//LOG(INFO)<<relativeLog;
+	//std::cout<<entropy_<<std::endl;
+	return entropy_/gtSum;
+}
+
+
 template <typename Dtype>
 void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
@@ -223,8 +271,8 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
           input_scale_t1=this->maxAndMin.cpu_data()[0];
           input_scale_t2=this->maxAndMin.cpu_data()[1];
         }
-        LOG(INFO)<<"input  region : "<<this->maxAndMin.cpu_data()[1]<<"\t\t"<<this->maxAndMin.cpu_data()[0];
-        LOG(INFO)<<"weight region : "<<this->maxAndMin.cpu_data()[3]<<"\t\t"<<this->maxAndMin.cpu_data()[2];
+        LOG(INFO)<<"input  region : "<<this->maxAndMin.cpu_data()[1]<<"\t"<<this->maxAndMin.cpu_data()[0];
+        LOG(INFO)<<"weight region : "<<this->maxAndMin.cpu_data()[3]<<"\t"<<this->maxAndMin.cpu_data()[2];
         LOG(INFO)<<preTestIdx<<" < "<<preTestBatches;
     }
 
@@ -254,32 +302,17 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
 		LOG(INFO)<<"bias_term_ DONE";
       }
     }
-	std::cout<<"**************************"<<std::endl; 
-	std::cout<<this->blobs_[0]->shape_string()<<std::endl;
-	std::cout<<this->blobs_[0]->cpu_data()[0]<<" "<<this->blobs_[0]->cpu_data()[1]<<" "<<this->blobs_[0]->cpu_data()[2]<<" "<<this->blobs_[0]->cpu_data()[3]<<" "<<this->blobs_[0]->cpu_data()[4]<<" "<<std::endl;
-	showDevice(this->blobs_[0]->gpu_data(),5);
-	caffe_gpu_axpy(this->blobs_[0]->count(),
-            (Dtype)1.0,
-            this->blobs_[0]->gpu_data(),
-            this->blobs_[0]->mutable_gpu_diff());
-std::cout<<"*************tt*************"<<std::endl; 
-	//showDevice(this->blobs_[0]->gpu_data(),5);
-	//exit(0);  
-    //std::cout<<"*************weight32*************"<<std::endl; 
-    // showDevice(weightFp32.gpu_data(),10);
-    // std::cout<<"*************weight8*************"<<std::endl; 
-    // showDevice(this->blobs_int8_[0]->gpu_data(),10);
-    // std::cout<<"*************input32*************"<<std::endl; 
-    // showDevice(bottom[0]->gpu_data(),50);
-    // std::cout<<"*************col_8*************"<<std::endl; 
-    // showDevice(col_buffer_.gpu_data(),50);
-    // std::cout<<"--**"<<std::endl; 
-    std::cout<<"*************int8 result*************"<<std::endl; 
-    //showDevice(top_result.cpu_data(),50);
-    std::cout<<"*************fp32 result*************"<<std::endl; 
-    //showDevice(bottom[1]->cpu_data(),50);
-    std::cout<<"============================"<<std::endl; 
-    //exit(0);
+
+    // std::cout<<"*************int8 result*************"<<std::endl; 
+    // showDevice(top_result.cpu_data(),50);
+    // std::cout<<"*************fp32 result*************"<<std::endl; 
+    // showDevice(bottom[1]->cpu_data(),50);
+    // std::cout<<"============================"<<std::endl; 
+	//LOG(INFO)<<top_result.asum_data();
+	//LOG(INFO)<<bottom[1]->asum_data();
+	//figureRelativeEntropy(&top_result, bottom[1]);
+	
+	top[0]->mutable_cpu_data()[0]=figureRelativeEntropy(&top_result, bottom[1]);
 }
 
 template <typename Dtype>

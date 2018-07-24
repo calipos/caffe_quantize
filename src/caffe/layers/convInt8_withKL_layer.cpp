@@ -266,6 +266,7 @@ void ConvInt8withKLLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
         }
         top[0]->Reshape(std::vector<int>({1}));
         top_result.Reshape(top_shape);
+		relativeEntropyBlob.Reshape(top_shape);
         CHECK(top_shape.size()==4)<<"only support 4dim!";
 
           int32out.Reshape(top_shape);
