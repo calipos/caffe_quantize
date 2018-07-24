@@ -19,6 +19,7 @@ void showDevice<float>(const float*data,int count)
         std::cout<<show[i]<<" ";
         if(i%10==9)std::cout <<std::endl;
     }
+	std::cout<<std::endl;
     free(show);
 }
 template <> 
@@ -31,6 +32,7 @@ void showDevice<double>(const double*data,int count)
         std::cout<<show[i]<<" ";
         if(i%10==9)std::cout <<std::endl;
     }
+	std::cout<<std::endl;
     free(show);
 }
 template <> 
@@ -43,6 +45,7 @@ void showDevice<signed char>(const signed char*data,int count)
         std::cout<<(int)show[i]<<" ";
         if(i%10==9)std::cout <<std::endl;
     }
+	std::cout<<std::endl;
     free(show);
 }
 template <> 
@@ -55,6 +58,7 @@ void showDevice<int>(const int*data,int count)
         std::cout<<show[i]<<" ";
         if(i%10==9)std::cout <<std::endl;
     }
+	std::cout<<std::endl;
     free(show);
 }
 

@@ -9,9 +9,9 @@
 #include "caffe/layers/base_conv_layer.hpp"
 
 
-#define SHOW_WEIGHT2INT8
-#define SHOW_INPUT2INT8
-#define SHOW_FP32COL
+//#define SHOW_WEIGHT2INT8
+//#define SHOW_INPUT2INT8
+//#define SHOW_FP32COL
 namespace caffe {
 
 /**

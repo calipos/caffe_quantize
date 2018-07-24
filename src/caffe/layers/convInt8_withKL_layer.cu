@@ -129,8 +129,8 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
                                                     dilation_.cpu_data()[0], dilation_.cpu_data()[1], col_buffer_.mutable_gpu_data(),this->blobs_[0].get()->cpu_data()[2],this->blobs_[0].get()->cpu_data()[3],this->input_temp_unit_sacle_1);
     col_buff = col_buffer_.gpu_data();
 #ifdef SHOW_INPUT2INT8
-          std::cout<<"--------------input_T1 = "<<this->blobs_[0].get()->mutable_cpu_data()[2]<<"-------------"<<std::endl; 
-          std::cout<<"--------------input_T2 = "<<this->blobs_[0].get()->mutable_cpu_data()[3]<<"-------------"<<std::endl; 
+          std::cout<<"--------------input_T1 = "<<this->blobs_[0].get()->cpu_data()[2]<<"-------------"<<std::endl; 
+          std::cout<<"--------------input_T2 = "<<this->blobs_[0].get()->cpu_data()[3]<<"-------------"<<std::endl; 
           std::cout<<"--------------input_sacle = "<<this->input_temp_unit_sacle_1<<"-------------"<<std::endl; 
           std::cout<<"-------------after col_buffer_-------------"<<std::endl; 
           showDevice(col_buffer_.gpu_data(),500);
@@ -155,10 +155,10 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_gemm(const Dtype* input,
 	LOG(INFO)<<"needReshape = "<<needReshape<<" AND (newN,newK)=( "<<newN<<", "<<newK<<" ) THE OLD = ("<<conv_out_spatial_dim_<<", "<<kernel_dim_<<" )";
 	if(needReshape>0) 
 	{
-		(cudaMallocManaged(&d_A_new, m * newK * sizeof(signed char)));
-		(cudaMallocManaged(&d_B_new, newK * newN * sizeof(signed char)));
-		(cudaMallocManaged(&d_C_32_new, m * newN * sizeof(signed char)));
-		LOG(INFO)<<"cudaMallocManaged DONE";
+		(cudaMalloc(&d_A_new, m * newK * sizeof(signed char)));
+		(cudaMalloc(&d_B_new, newK * newN * sizeof(signed char)));
+		(cudaMalloc(&d_C_32_new, m * newN * sizeof(signed char)));
+		LOG(INFO)<<"cudaMalloc DONE";
 	}
 	
   for (int g = 0; g < group_; ++g) 
@@ -198,13 +198,14 @@ void ConvInt8withKLLayer<Dtype>::forward_gpu_bias(Dtype* output, const Dtype* bi
 template <typename Dtype>
 void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
-        
+ 
     if(!weightFp32HasExtracted)  
     {
         getFp32Weight();
         getMaxAndMIn(weightFp32.count(),weightFp32.gpu_data(), &(this->maxAndMin.mutable_gpu_data()[3]),&(this->maxAndMin.mutable_gpu_data()[2]));
         LOG(INFO)<<this->maxAndMin.cpu_data()[3]<<"\t\t"<<this->maxAndMin.cpu_data()[2];
     }
+
     if(preTestIdx<preTestBatches)
     {
         getMaxAndMIn(bottom[0]->count(),bottom[0]->gpu_data(), &(this->maxAndMin.mutable_gpu_data()[1]),&(this->maxAndMin.mutable_gpu_data()[0]));
@@ -226,6 +227,7 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
         LOG(INFO)<<"weight region : "<<this->maxAndMin.cpu_data()[3]<<"\t\t"<<this->maxAndMin.cpu_data()[2];
         LOG(INFO)<<preTestIdx<<" < "<<preTestBatches;
     }
+
     if(preTestIdx<preTestBatches) return;
     computeInt8Weight(&preTestIdx,this->maxAndMin.cpu_data()[2],this->maxAndMin.cpu_data()[3]);
     computeInt8input(&preTestIdx,this->maxAndMin.cpu_data()[0],this->maxAndMin.cpu_data()[1]);
@@ -252,7 +254,17 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
 		LOG(INFO)<<"bias_term_ DONE";
       }
     }
-
+	std::cout<<"**************************"<<std::endl; 
+	std::cout<<this->blobs_[0]->shape_string()<<std::endl;
+	std::cout<<this->blobs_[0]->cpu_data()[0]<<" "<<this->blobs_[0]->cpu_data()[1]<<" "<<this->blobs_[0]->cpu_data()[2]<<" "<<this->blobs_[0]->cpu_data()[3]<<" "<<this->blobs_[0]->cpu_data()[4]<<" "<<std::endl;
+	showDevice(this->blobs_[0]->gpu_data(),5);
+	caffe_gpu_axpy(this->blobs_[0]->count(),
+            (Dtype)1.0,
+            this->blobs_[0]->gpu_data(),
+            this->blobs_[0]->mutable_gpu_diff());
+std::cout<<"*************tt*************"<<std::endl; 
+	//showDevice(this->blobs_[0]->gpu_data(),5);
+	//exit(0);  
     //std::cout<<"*************weight32*************"<<std::endl; 
     // showDevice(weightFp32.gpu_data(),10);
     // std::cout<<"*************weight8*************"<<std::endl; 
@@ -267,7 +279,7 @@ void ConvInt8withKLLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     std::cout<<"*************fp32 result*************"<<std::endl; 
     //showDevice(bottom[1]->cpu_data(),50);
     std::cout<<"============================"<<std::endl; 
-    exit(0);
+    //exit(0);
 }
 
 template <typename Dtype>

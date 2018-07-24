@@ -223,8 +223,14 @@ void ConvInt8withKLLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   // blobs_[8]:bias*/
   this->blobs_.resize(this->conv_learnable_blob_size);
   this->blobs_int8_.resize(1);
-  this->blobs_[0].reset(new Blob<Dtype>(std::vector<int>{1,8}));  
+  std::vector<int> blob0_shape;
+  blob0_shape.resize(2);
+  blob0_shape[0]=1;
+  blob0_shape[1]=8;
+  this->blobs_[0].reset(new Blob<Dtype>(blob0_shape));  
   for(int i=0;i<8;i++) this->blobs_[0].get()->mutable_cpu_data()[i]=-1;
+  
+  
   this->blobs_int8_[0].reset(new Blob<signed char>(weight_shape));
   weightFp32.Reshape(weight_shape);
   weightFp32HasExtracted = false;
@@ -243,7 +249,7 @@ void ConvInt8withKLLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 template <typename Dtype>
 void ConvInt8withKLLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
-    
+
         const int first_spatial_axis = channel_axis_ + 1;
         CHECK_EQ(bottom[0]->num_axes(), first_spatial_axis + num_spatial_axes_)<< "bottom num_axes may not change.";
         num_ = bottom[0]->count(0, channel_axis_);

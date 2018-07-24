@@ -1,6 +1,6 @@
-I0719 16:24:07.533185 15663 caffe.cpp:217] Using GPUs 0
-I0719 16:24:10.717875 15663 caffe.cpp:222] GPU 0: GeForce GTX 1080 Ti
-I0719 16:24:11.315423 15663 solver.cpp:63] Initializing solver from parameters: 
+I0724 10:38:08.215189 18735 caffe.cpp:217] Using GPUs 0
+I0724 10:38:08.249873 18735 caffe.cpp:222] GPU 0: GeForce GTX 1080 Ti
+I0724 10:38:08.841035 18735 solver.cpp:63] Initializing solver from parameters: 
 train_net: "/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/quantizedNet.prototxt"
 base_lr: 0.01
 display: 1
@@ -28,8 +28,8 @@ iter_size: 1
 type: "SGD"
 eval_type: "detection"
 ap_version: "11point"
-I0719 16:24:11.315662 15663 solver.cpp:96] Creating training net from train_net file: /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/quantizedNet.prototxt
-I0719 16:24:11.316438 15663 net.cpp:58] Initializing net from parameters: 
+I0724 10:38:08.841267 18735 solver.cpp:96] Creating training net from train_net file: /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/quantizedNet.prototxt
+I0724 10:38:08.842001 18735 net.cpp:58] Initializing net from parameters: 
 name: "ssd304p_vehiclePeroson_train"
 state {
   phase: TRAIN
@@ -154,9 +154,9 @@ layer {
   convolution_param {
     num_output: 32
     bias_term: false
-    pad: 1
+    pad: 0
     kernel_size: 3
-    stride: 2
+    stride: 1
     weight_filler {
       type: "xavier"
     }
@@ -178,9 +178,9 @@ layer {
   convolution_param {
     num_output: 32
     bias_term: false
-    pad: 1
+    pad: 0
     kernel_size: 3
-    stride: 2
+    stride: 1
     weight_filler {
       type: "xavier"
     }
@@ -198,152 +198,1441 @@ layer {
     layer_fp32_name: "stem1"
   }
 }
-I0719 16:24:11.316586 15663 layer_factory.hpp:77] Creating layer data
-I0719 16:24:11.317270 15663 net.cpp:100] Creating Layer data
-I0719 16:24:11.317296 15663 net.cpp:408] data -> data
-I0719 16:24:11.317476 15663 net.cpp:408] data -> label
-I0719 16:24:11.319180 15689 db_lmdb.cpp:35] Opened lmdb /media/hdd/lbl_trainData/share/originVoc/lmdb/VOC2007_trainval_lmdb
-I0719 16:24:11.343729 15663 annotated_data_layer.cpp:62] output data size: 1,3,304,304
-I0719 16:24:11.351603 15663 net.cpp:150] Setting up data
-I0719 16:24:11.351645 15663 net.cpp:157] Top shape: 1 3 304 304 (277248)
-I0719 16:24:11.351657 15663 net.cpp:157] Top shape: 1 1 5 8 (40)
-I0719 16:24:11.351665 15663 net.cpp:165] Memory required for data: 1109152
-I0719 16:24:11.351681 15663 layer_factory.hpp:77] Creating layer data_data_0_split
-I0719 16:24:11.351709 15663 net.cpp:100] Creating Layer data_data_0_split
-I0719 16:24:11.351722 15663 net.cpp:434] data_data_0_split <- data
-I0719 16:24:11.351747 15663 net.cpp:408] data_data_0_split -> data_data_0_split_0
-I0719 16:24:11.351766 15663 net.cpp:408] data_data_0_split -> data_data_0_split_1
-I0719 16:24:11.351971 15663 net.cpp:150] Setting up data_data_0_split
-I0719 16:24:11.352010 15663 net.cpp:157] Top shape: 1 3 304 304 (277248)
-I0719 16:24:11.352021 15663 net.cpp:157] Top shape: 1 3 304 304 (277248)
-I0719 16:24:11.352030 15663 net.cpp:165] Memory required for data: 3327136
-I0719 16:24:11.352041 15663 layer_factory.hpp:77] Creating layer stem1
-I0719 16:24:11.352077 15663 net.cpp:100] Creating Layer stem1
-I0719 16:24:11.352088 15663 net.cpp:434] stem1 <- data_data_0_split_0
-I0719 16:24:11.352107 15663 net.cpp:408] stem1 -> stem1
-I0719 16:24:11.354681 15663 net.cpp:150] Setting up stem1
-I0719 16:24:11.354715 15663 net.cpp:157] Top shape: 1 32 152 152 (739328)
-I0719 16:24:11.354725 15663 net.cpp:165] Memory required for data: 6284448
-I0719 16:24:11.354753 15663 layer_factory.hpp:77] Creating layer stem1_int8
-I0719 16:24:11.354789 15663 net.cpp:100] Creating Layer stem1_int8
-I0719 16:24:11.354800 15663 net.cpp:434] stem1_int8 <- data_data_0_split_1
-I0719 16:24:11.354810 15663 net.cpp:434] stem1_int8 <- stem1
-I0719 16:24:11.354820 15663 net.cpp:434] stem1_int8 <- label
-I0719 16:24:11.354836 15663 net.cpp:408] stem1_int8 -> stem1_int8
-I0719 16:24:11.355084 15663 convInt8_withKL_layer.cpp:192]  **  the weights of stem1 will be extracted from /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.caffemodel
-I0719 16:24:11.355393 15663 net.cpp:150] Setting up stem1_int8
-I0719 16:24:11.355410 15663 net.cpp:157] Top shape: 1 (1)
-I0719 16:24:11.355417 15663 net.cpp:165] Memory required for data: 6284452
-I0719 16:24:11.355433 15663 net.cpp:228] stem1_int8 does not need backward computation.
-I0719 16:24:11.355444 15663 net.cpp:228] stem1 does not need backward computation.
-I0719 16:24:11.355453 15663 net.cpp:228] data_data_0_split does not need backward computation.
-I0719 16:24:11.355463 15663 net.cpp:228] data does not need backward computation.
-I0719 16:24:11.355470 15663 net.cpp:270] This network produces output stem1_int8
-I0719 16:24:11.355489 15663 net.cpp:283] Network initialization done.
-I0719 16:24:11.355554 15663 solver.cpp:75] Solver scaffolding done.
-I0719 16:24:11.355717 15663 caffe.cpp:155] Finetuning from /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.caffemodel
-I0719 16:24:11.355852 15663 net.cpp:761] Ignoring source layer input
-I0719 16:24:11.355891 15663 caffe.cpp:251] Starting Optimization
-I0719 16:24:11.355902 15663 solver.cpp:294] Solving ssd304p_vehiclePeroson_train
-I0719 16:24:11.355911 15663 solver.cpp:295] Learning Rate Policy: multistep
-I0719 16:24:11.356606 15663 blocking_queue.cpp:50] Data layer prefetch queue empty
-I0719 16:24:11.385208 15663 convInt8_withKL_layer.cpp:20] Copying source layer stem1. source_layer.blobs_size()= 1
-I0719 16:24:11.385440 15663 convInt8_withKL_layer.cu:158] 0.333284		-0.331954
-I0719 16:24:11.386209 15663 convInt8_withKL_layer.cu:177] input  region : 123		-128
-I0719 16:24:11.386231 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:11.386240 15663 convInt8_withKL_layer.cu:179] 1 < 10
-I0719 16:24:11.386253 15663 solver.cpp:243] Iteration 0, loss = 0
-I0719 16:24:11.386310 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:11.386337 15663 sgd_solver.cpp:137] Iteration 0, lr = 0.01
-I0719 16:24:11.386353 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:11.386363 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:11.466050 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:11.466094 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:11.466104 15663 convInt8_withKL_layer.cu:179] 2 < 10
-I0719 16:24:11.466112 15663 solver.cpp:243] Iteration 1, loss = 0
-I0719 16:24:11.466122 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:11.466133 15663 sgd_solver.cpp:137] Iteration 1, lr = 0.01
-I0719 16:24:11.466156 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:11.466168 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:11.495395 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:11.495436 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:11.495450 15663 convInt8_withKL_layer.cu:179] 3 < 10
-I0719 16:24:11.495458 15663 solver.cpp:243] Iteration 2, loss = 0
-I0719 16:24:11.495471 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:11.495482 15663 sgd_solver.cpp:137] Iteration 2, lr = 0.01
-I0719 16:24:11.495496 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:11.495508 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:11.672852 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:11.672895 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:11.672906 15663 convInt8_withKL_layer.cu:179] 4 < 10
-I0719 16:24:11.672914 15663 solver.cpp:243] Iteration 3, loss = 0
-I0719 16:24:11.672924 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:11.672935 15663 sgd_solver.cpp:137] Iteration 3, lr = 0.01
-I0719 16:24:11.672947 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:11.672956 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:11.701437 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:11.701474 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:11.701484 15663 convInt8_withKL_layer.cu:179] 5 < 10
-I0719 16:24:11.701493 15663 solver.cpp:243] Iteration 4, loss = 0
-I0719 16:24:11.701504 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:11.701515 15663 sgd_solver.cpp:137] Iteration 4, lr = 0.01
-I0719 16:24:11.701527 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:11.701535 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:11.787263 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:11.787305 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:11.787318 15663 convInt8_withKL_layer.cu:179] 6 < 10
-I0719 16:24:11.787326 15663 solver.cpp:243] Iteration 5, loss = 0
-I0719 16:24:11.787338 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:11.787349 15663 sgd_solver.cpp:137] Iteration 5, lr = 0.01
-I0719 16:24:11.787364 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:11.787376 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:11.882704 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:11.882746 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:11.882758 15663 convInt8_withKL_layer.cu:179] 7 < 10
-I0719 16:24:11.882767 15663 solver.cpp:243] Iteration 6, loss = 0
-I0719 16:24:11.882778 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:11.882791 15663 sgd_solver.cpp:137] Iteration 6, lr = 0.01
-I0719 16:24:11.882835 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:11.882848 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:12.039021 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:12.039069 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:12.039081 15663 convInt8_withKL_layer.cu:179] 8 < 10
-I0719 16:24:12.039090 15663 solver.cpp:243] Iteration 7, loss = 0
-I0719 16:24:12.039101 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:12.039113 15663 sgd_solver.cpp:137] Iteration 7, lr = 0.01
-I0719 16:24:12.039129 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:12.039141 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:12.052913 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:12.052953 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:12.052965 15663 convInt8_withKL_layer.cu:179] 9 < 10
-I0719 16:24:12.052974 15663 solver.cpp:243] Iteration 8, loss = 0
-I0719 16:24:12.052985 15663 solver.cpp:259]     Train net output #0: stem1_int8 = 0
-I0719 16:24:12.052997 15663 sgd_solver.cpp:137] Iteration 8, lr = 0.01
-I0719 16:24:12.053015 15663 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
-I0719 16:24:12.053026 15663 sgd_solver.cpp:140] [1] 1 8 (8)
-I0719 16:24:12.090440 15663 convInt8_withKL_layer.cu:177] input  region : 127		-128
-I0719 16:24:12.090481 15663 convInt8_withKL_layer.cu:178] weight region : 0.333284		-0.331954
-I0719 16:24:12.090493 15663 convInt8_withKL_layer.cu:179] 10 < 10
-I0719 16:24:12.090589 15663 convInt8_withKL_layer.cu:41] weight_temp_unit_sacle = 0.00261381;  weight_temp_unit_sacle_1 = 382.584
-I0719 16:24:12.090612 15663 convInt8_withKL_layer.cu:57] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
-I0719 16:24:12.091406 15663 convInt8_withKL_layer.cu:109] 27 152 152 (623808)
-I0719 16:24:12.091485 15663 convInt8_withKL_layer.cu:132] caffe_gpu_iGemm PARAM : 32 23104 27
-F0719 16:24:12.092135 15663 math_functions.cu:239] Check failed: status == CUBLAS_STATUS_SUCCESS (15 vs. 0)  CUBLAS_STATUS_NOT_SUPPORTED
-*** Check failure stack trace: ***
-    @     0x7f8cc43aadaa  (unknown)
-    @     0x7f8cc43aace4  (unknown)
-    @     0x7f8cc43aa6e6  (unknown)
-    @     0x7f8cc43ad687  (unknown)
-    @     0x7f8cc4c73e29  caffe::caffe_gpu_iGemm()
-    @     0x7f8cc4cc23b6  caffe::ConvInt8withKLLayer<>::forward_gpu_gemm()
-    @     0x7f8cc4cc27cf  caffe::ConvInt8withKLLayer<>::Forward_gpu()
-    @     0x7f8cc4c56e85  caffe::Net<>::ForwardFromTo()
-    @     0x7f8cc4c571f7  caffe::Net<>::Forward()
-    @     0x7f8cc4c3bc08  caffe::Solver<>::Step()
-    @     0x7f8cc4c3c2fe  caffe::Solver<>::Solve()
-    @           0x408f53  train()
-    @           0x40631c  main
-    @     0x7f8cc33b6f45  (unknown)
-    @           0x406b7b  (unknown)
-    @              (nil)  (unknown)
- ** On entry to GEMM_EX  parameter number 12 had an illegal value
+I0724 10:38:08.842124 18735 layer_factory.hpp:77] Creating layer data
+I0724 10:38:08.842788 18735 net.cpp:100] Creating Layer data
+I0724 10:38:08.842814 18735 net.cpp:408] data -> data
+I0724 10:38:08.843011 18735 net.cpp:408] data -> label
+I0724 10:38:08.844732 18741 db_lmdb.cpp:35] Opened lmdb /media/hdd/lbl_trainData/share/originVoc/lmdb/VOC2007_trainval_lmdb
+I0724 10:38:08.875042 18735 annotated_data_layer.cpp:62] output data size: 1,3,304,304
+I0724 10:38:08.882633 18735 net.cpp:150] Setting up data
+I0724 10:38:08.882663 18735 net.cpp:157] Top shape: 1 3 304 304 (277248)
+I0724 10:38:08.882671 18735 net.cpp:157] Top shape: 1 1 5 8 (40)
+I0724 10:38:08.882676 18735 net.cpp:165] Memory required for data: 1109152
+I0724 10:38:08.882689 18735 layer_factory.hpp:77] Creating layer data_data_0_split
+I0724 10:38:08.882710 18735 net.cpp:100] Creating Layer data_data_0_split
+I0724 10:38:08.882720 18735 net.cpp:434] data_data_0_split <- data
+I0724 10:38:08.882738 18735 net.cpp:408] data_data_0_split -> data_data_0_split_0
+I0724 10:38:08.882755 18735 net.cpp:408] data_data_0_split -> data_data_0_split_1
+I0724 10:38:08.882823 18735 net.cpp:150] Setting up data_data_0_split
+I0724 10:38:08.882834 18735 net.cpp:157] Top shape: 1 3 304 304 (277248)
+I0724 10:38:08.882843 18735 net.cpp:157] Top shape: 1 3 304 304 (277248)
+I0724 10:38:08.882848 18735 net.cpp:165] Memory required for data: 3327136
+I0724 10:38:08.882853 18735 layer_factory.hpp:77] Creating layer stem1
+I0724 10:38:08.882877 18735 net.cpp:100] Creating Layer stem1
+I0724 10:38:08.882885 18735 net.cpp:434] stem1 <- data_data_0_split_0
+I0724 10:38:08.882896 18735 net.cpp:408] stem1 -> stem1
+I0724 10:38:08.884762 18735 net.cpp:150] Setting up stem1
+I0724 10:38:08.884783 18735 net.cpp:157] Top shape: 1 32 302 302 (2918528)
+I0724 10:38:08.884791 18735 net.cpp:165] Memory required for data: 15001248
+I0724 10:38:08.884809 18735 layer_factory.hpp:77] Creating layer stem1_int8
+I0724 10:38:08.884835 18735 net.cpp:100] Creating Layer stem1_int8
+I0724 10:38:08.884842 18735 net.cpp:434] stem1_int8 <- data_data_0_split_1
+I0724 10:38:08.884850 18735 net.cpp:434] stem1_int8 <- stem1
+I0724 10:38:08.884855 18735 net.cpp:434] stem1_int8 <- label
+I0724 10:38:08.884868 18735 net.cpp:408] stem1_int8 -> stem1_int8
+I0724 10:38:08.885038 18735 convInt8_withKL_layer.cpp:196]  **  the weights of stem1 will be extracted from /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.caffemodel
+I0724 10:38:08.885352 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:08.885365 18735 net.cpp:150] Setting up stem1_int8
+I0724 10:38:08.885371 18735 net.cpp:157] Top shape: 1 (1)
+I0724 10:38:08.885377 18735 net.cpp:165] Memory required for data: 15001252
+I0724 10:38:08.885388 18735 net.cpp:228] stem1_int8 does not need backward computation.
+I0724 10:38:08.885397 18735 net.cpp:228] stem1 does not need backward computation.
+I0724 10:38:08.885402 18735 net.cpp:228] data_data_0_split does not need backward computation.
+I0724 10:38:08.885408 18735 net.cpp:228] data does not need backward computation.
+I0724 10:38:08.885412 18735 net.cpp:270] This network produces output stem1_int8
+I0724 10:38:08.885423 18735 net.cpp:283] Network initialization done.
+I0724 10:38:08.885473 18735 solver.cpp:75] Solver scaffolding done.
+I0724 10:38:08.885588 18735 caffe.cpp:155] Finetuning from /media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.caffemodel
+I0724 10:38:08.885679 18735 net.cpp:761] Ignoring source layer input
+I0724 10:38:08.885706 18735 caffe.cpp:251] Starting Optimization
+I0724 10:38:08.885713 18735 solver.cpp:294] Solving ssd304p_vehiclePeroson_train
+I0724 10:38:08.885718 18735 solver.cpp:295] Learning Rate Policy: multistep
+I0724 10:38:08.886256 18735 blocking_queue.cpp:50] Data layer prefetch queue empty
+I0724 10:38:08.924226 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:08.924307 18735 convInt8_withKL_layer.cpp:20] Copying source layer stem1. source_layer.blobs_size()= 1
+I0724 10:38:08.925292 18735 convInt8_withKL_layer.cu:206] 0.333139		-0.333175
+I0724 10:38:08.926087 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:08.926102 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:08.926110 18735 convInt8_withKL_layer.cu:228] 1 < 10
+I0724 10:38:08.926118 18735 solver.cpp:243] Iteration 0, loss = 0
+I0724 10:38:08.926153 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:08.926170 18735 sgd_solver.cpp:137] Iteration 0, lr = 0.01
+I0724 10:38:08.926182 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:08.926188 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:08.979230 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:08.980312 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:08.980334 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:08.980341 18735 convInt8_withKL_layer.cu:228] 2 < 10
+I0724 10:38:08.980348 18735 solver.cpp:243] Iteration 1, loss = 0
+I0724 10:38:08.980355 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:08.980365 18735 sgd_solver.cpp:137] Iteration 1, lr = 0.01
+I0724 10:38:08.980373 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:08.980381 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.026132 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.027336 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:09.027364 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:09.027375 18735 convInt8_withKL_layer.cu:228] 3 < 10
+I0724 10:38:09.027384 18735 solver.cpp:243] Iteration 2, loss = 0
+I0724 10:38:09.027395 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.027407 18735 sgd_solver.cpp:137] Iteration 2, lr = 0.01
+I0724 10:38:09.027420 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.027429 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.213140 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.214315 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:09.214340 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:09.214349 18735 convInt8_withKL_layer.cu:228] 4 < 10
+I0724 10:38:09.214357 18735 solver.cpp:243] Iteration 3, loss = 0
+I0724 10:38:09.214387 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.214399 18735 sgd_solver.cpp:137] Iteration 3, lr = 0.01
+I0724 10:38:09.214412 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.214423 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.236515 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.237690 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:09.237715 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:09.237725 18735 convInt8_withKL_layer.cu:228] 5 < 10
+I0724 10:38:09.237733 18735 solver.cpp:243] Iteration 4, loss = 0
+I0724 10:38:09.237743 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.237754 18735 sgd_solver.cpp:137] Iteration 4, lr = 0.01
+I0724 10:38:09.237767 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.237776 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.366066 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.367238 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:09.367265 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:09.367275 18735 convInt8_withKL_layer.cu:228] 6 < 10
+I0724 10:38:09.367283 18735 solver.cpp:243] Iteration 5, loss = 0
+I0724 10:38:09.367295 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.367341 18735 sgd_solver.cpp:137] Iteration 5, lr = 0.01
+I0724 10:38:09.367357 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.367368 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.483309 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.484483 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:09.484508 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:09.484519 18735 convInt8_withKL_layer.cu:228] 7 < 10
+I0724 10:38:09.484526 18735 solver.cpp:243] Iteration 6, loss = 0
+I0724 10:38:09.484536 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.484547 18735 sgd_solver.cpp:137] Iteration 6, lr = 0.01
+I0724 10:38:09.484560 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.484572 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.629101 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.630270 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:09.630295 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:09.630306 18735 convInt8_withKL_layer.cu:228] 8 < 10
+I0724 10:38:09.630313 18735 solver.cpp:243] Iteration 7, loss = 0
+I0724 10:38:09.630323 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.630334 18735 sgd_solver.cpp:137] Iteration 7, lr = 0.01
+I0724 10:38:09.630347 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.630360 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.640614 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.641785 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:09.641809 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:09.641819 18735 convInt8_withKL_layer.cu:228] 9 < 10
+I0724 10:38:09.641829 18735 solver.cpp:243] Iteration 8, loss = 0
+I0724 10:38:09.641839 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.641849 18735 sgd_solver.cpp:137] Iteration 8, lr = 0.01
+I0724 10:38:09.641862 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.641870 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.689766 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.690930 18735 convInt8_withKL_layer.cu:226] input  region : 127		-128
+I0724 10:38:09.690958 18735 convInt8_withKL_layer.cu:227] weight region : 0.333139		-0.333175
+I0724 10:38:09.690968 18735 convInt8_withKL_layer.cu:228] 10 < 10
+I0724 10:38:09.691102 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.691125 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.691938 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.692585 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.692608 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.693776 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.695300 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.999826 -0.999826 -128 128 -0.333175 
+-0.999826 -0.999826 -128 128 -0.333175 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.695475 18735 solver.cpp:243] Iteration 9, loss = 0
+I0724 10:38:09.695494 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.695508 18735 sgd_solver.cpp:137] Iteration 9, lr = 0.01
+I0724 10:38:09.695523 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.695533 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.699587 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.699620 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.699961 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.699983 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.700033 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.700043 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.701282 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.702389 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.989795 -0.989795 -128 128 -0.329814 
+-0.989795 -0.989795 -128 128 -0.329814 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.702571 18735 solver.cpp:243] Iteration 10, loss = 0
+I0724 10:38:09.702589 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.702601 18735 sgd_solver.cpp:137] Iteration 10, lr = 0.01
+I0724 10:38:09.702615 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.702623 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.750008 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.750037 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.750391 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.750412 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.750435 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.750442 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.751528 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.752820 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.970864 -0.970864 -128 128 -0.32349 
+-0.970864 -0.970864 -128 128 -0.32349 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.752990 18735 solver.cpp:243] Iteration 11, loss = 0
+I0724 10:38:09.753005 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.753017 18735 sgd_solver.cpp:137] Iteration 11, lr = 0.01
+I0724 10:38:09.753031 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.753037 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.794875 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.794901 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.795261 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.795279 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.795298 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.795305 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.796285 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.797363 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.944113 -0.944113 -128 128 -0.314561 
+-0.944113 -0.944113 -128 128 -0.314561 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.797524 18735 solver.cpp:243] Iteration 12, loss = 0
+I0724 10:38:09.797539 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.797549 18735 sgd_solver.cpp:137] Iteration 12, lr = 0.01
+I0724 10:38:09.797559 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.797566 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.840719 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.840750 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.841100 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.841120 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.841145 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.841151 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.842308 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.843405 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.910591 -0.910591 -128 128 -0.303378 
+-0.910591 -0.910591 -128 128 -0.303378 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.844570 18735 solver.cpp:243] Iteration 13, loss = 0
+I0724 10:38:09.844588 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.844599 18735 sgd_solver.cpp:137] Iteration 13, lr = 0.01
+I0724 10:38:09.844614 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.844625 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.852074 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.852108 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.852461 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.852483 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.852509 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.852515 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.853751 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.854933 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.871311 -0.871311 -128 128 -0.290278 
+-0.871311 -0.871311 -128 128 -0.290278 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.855100 18735 solver.cpp:243] Iteration 14, loss = 0
+I0724 10:38:09.855118 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.855130 18735 sgd_solver.cpp:137] Iteration 14, lr = 0.01
+I0724 10:38:09.855144 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.855154 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.869401 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.869432 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.869786 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.869807 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.869829 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.869837 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.871009 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.872068 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.827242 -0.827242 -128 128 -0.275584 
+-0.827242 -0.827242 -128 128 -0.275584 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.872251 18735 solver.cpp:243] Iteration 15, loss = 0
+I0724 10:38:09.872269 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.872282 18735 sgd_solver.cpp:137] Iteration 15, lr = 0.01
+I0724 10:38:09.872294 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.872303 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.906139 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.906169 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.906533 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.906555 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.906615 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.906623 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.908013 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.908830 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.779303 -0.779303 -128 128 -0.259602 
+-0.779303 -0.779303 -128 128 -0.259602 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.909874 18735 solver.cpp:243] Iteration 16, loss = 0
+I0724 10:38:09.909888 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.909898 18735 sgd_solver.cpp:137] Iteration 16, lr = 0.01
+I0724 10:38:09.909911 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.909920 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.916182 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.916208 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.916571 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.916587 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.916607 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.916613 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.917618 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.918622 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.72836 -0.72836 -128 128 -0.242621 
+-0.72836 -0.72836 -128 128 -0.242621 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.918812 18735 solver.cpp:243] Iteration 17, loss = 0
+I0724 10:38:09.918826 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.918835 18735 sgd_solver.cpp:137] Iteration 17, lr = 0.01
+I0724 10:38:09.918846 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.918853 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.937649 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.937674 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.938042 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.938057 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.938076 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.938083 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.939018 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.940213 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.675225 -0.675225 -128 128 -0.22491 
+-0.675225 -0.675225 -128 128 -0.22491 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.940400 18735 solver.cpp:243] Iteration 18, loss = 0
+I0724 10:38:09.940414 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.940423 18735 sgd_solver.cpp:137] Iteration 18, lr = 0.01
+I0724 10:38:09.940434 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.940443 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.944615 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.944639 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.944986 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.945001 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.945020 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.945025 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.945951 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.947191 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.620648 -0.620648 -128 128 -0.20672 
+-0.620648 -0.620648 -128 128 -0.20672 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.947372 18735 solver.cpp:243] Iteration 19, loss = 0
+I0724 10:38:09.947386 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.947396 18735 sgd_solver.cpp:137] Iteration 19, lr = 0.01
+I0724 10:38:09.947407 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.947413 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.963222 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.963246 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.963613 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.963631 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.963650 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.963656 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.964581 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.966971 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.565319 -0.565319 -128 128 -0.188282 
+-0.565319 -0.565319 -128 128 -0.188282 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.967228 18735 solver.cpp:243] Iteration 20, loss = 0
+I0724 10:38:09.967248 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.967263 18735 sgd_solver.cpp:137] Iteration 20, lr = 0.01
+I0724 10:38:09.967278 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.967288 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:09.987781 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:09.987809 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:09.988155 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:09.988178 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:09.988204 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:09.988210 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:09.989465 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:09.990463 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.509867 -0.509867 -128 128 -0.169803 
+-0.509867 -0.509867 -128 128 -0.169803 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:09.990651 18735 solver.cpp:243] Iteration 21, loss = 0
+I0724 10:38:09.990669 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:09.990682 18735 sgd_solver.cpp:137] Iteration 21, lr = 0.01
+I0724 10:38:09.990695 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:09.990705 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.023964 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.023993 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.024358 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.024377 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.024402 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.024410 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.026341 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.028097 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.454858 -0.454858 -128 128 -0.151473 
+-0.454858 -0.454858 -128 128 -0.151473 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.028268 18735 solver.cpp:243] Iteration 22, loss = 0
+I0724 10:38:10.028285 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.028297 18735 sgd_solver.cpp:137] Iteration 22, lr = 0.01
+I0724 10:38:10.028309 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.028317 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.048358 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.048385 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.048754 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.048772 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.048795 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.048804 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.049875 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.051014 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.4008 -0.4008 -128 128 -0.133461 
+-0.4008 -0.4008 -128 128 -0.133461 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.051183 18735 solver.cpp:243] Iteration 23, loss = 0
+I0724 10:38:10.051198 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.051208 18735 sgd_solver.cpp:137] Iteration 23, lr = 0.01
+I0724 10:38:10.051219 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.051228 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.058262 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.058288 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.058647 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.058667 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.058689 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.058696 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.059708 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.060891 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.348138 -0.348138 -128 128 -0.115914 
+-0.348138 -0.348138 -128 128 -0.115914 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.061074 18735 solver.cpp:243] Iteration 24, loss = 0
+I0724 10:38:10.061107 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.061120 18735 sgd_solver.cpp:137] Iteration 24, lr = 0.01
+I0724 10:38:10.061131 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.061137 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.103293 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.103317 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.103673 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.103689 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.103710 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.103715 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.106190 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.107293 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.297258 -0.297258 -128 128 -0.0989629 
+-0.297258 -0.297258 -128 128 -0.0989629 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.107467 18735 solver.cpp:243] Iteration 25, loss = 0
+I0724 10:38:10.107486 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.107501 18735 sgd_solver.cpp:137] Iteration 25, lr = 0.01
+I0724 10:38:10.107514 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.107525 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.130880 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.130909 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.131268 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.131287 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.131311 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.131319 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.132462 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.133307 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.248493 -0.248493 -128 128 -0.0827165 
+-0.248493 -0.248493 -128 128 -0.0827165 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.134251 18735 solver.cpp:243] Iteration 26, loss = 0
+I0724 10:38:10.134268 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.134279 18735 sgd_solver.cpp:137] Iteration 26, lr = 0.01
+I0724 10:38:10.134289 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.134300 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.173394 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.173422 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.173789 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.173807 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.173830 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.173836 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.175016 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.176226 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.202118 -0.202118 -128 128 -0.0672672 
+-0.202118 -0.202118 -128 128 -0.0672672 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.176401 18735 solver.cpp:243] Iteration 27, loss = 0
+I0724 10:38:10.176420 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.176432 18735 sgd_solver.cpp:137] Iteration 27, lr = 0.01
+I0724 10:38:10.176445 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.176455 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.223963 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.223991 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.224347 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.224367 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.224416 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.224426 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.226946 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.228104 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.158358 -0.158358 -128 128 -0.0526898 
+-0.158358 -0.158358 -128 128 -0.0526898 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.229287 18735 solver.cpp:243] Iteration 28, loss = 0
+I0724 10:38:10.229305 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.229316 18735 sgd_solver.cpp:137] Iteration 28, lr = 0.01
+I0724 10:38:10.229332 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.229342 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.236821 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.236852 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.237216 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.237237 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.237264 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.237272 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.238525 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.239648 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.11739 -0.11739 -128 128 -0.0390429 
+-0.11739 -0.11739 -128 128 -0.0390429 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.239816 18735 solver.cpp:243] Iteration 29, loss = 0
+I0724 10:38:10.239835 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.239846 18735 sgd_solver.cpp:137] Iteration 29, lr = 0.01
+I0724 10:38:10.239861 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.239868 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.267343 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.267372 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.267721 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.267741 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.267766 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.267773 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.268914 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.270149 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.0793441 -0.0793441 -128 128 -0.0263702 
+-0.0793441 -0.0793441 -128 128 -0.0263702 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.270324 18735 solver.cpp:243] Iteration 30, loss = 0
+I0724 10:38:10.270340 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.270352 18735 sgd_solver.cpp:137] Iteration 30, lr = 0.01
+I0724 10:38:10.270382 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.270392 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.307770 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.307799 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.308166 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.308185 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.308209 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.308217 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.309355 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.310482 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.044309 -0.044309 -128 128 -0.0147008 
+-0.044309 -0.044309 -128 128 -0.0147008 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.310659 18735 solver.cpp:243] Iteration 31, loss = 0
+I0724 10:38:10.310676 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.310688 18735 sgd_solver.cpp:137] Iteration 31, lr = 0.01
+I0724 10:38:10.310700 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.310729 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.317731 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.317759 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.318090 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.318109 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.318132 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.318138 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.319226 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.320336 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.0123341 -0.0123341 -128 128 -0.00405136 
+-0.0123341 -0.0123341 -128 128 -0.00405136 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.320508 18735 solver.cpp:243] Iteration 32, loss = 0
+I0724 10:38:10.320524 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.320535 18735 sgd_solver.cpp:137] Iteration 32, lr = 0.01
+I0724 10:38:10.320549 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.320556 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.351441 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.351467 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.352514 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.352531 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.352552 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.352560 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.353575 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.354912 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0165667 0.0165667 -128 128 0.0055737 
+0.0165667 0.0165667 -128 128 0.0055737 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.355075 18735 solver.cpp:243] Iteration 33, loss = 0
+I0724 10:38:10.355089 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.355098 18735 sgd_solver.cpp:137] Iteration 33, lr = 0.01
+I0724 10:38:10.355108 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.355116 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.456228 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.456266 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.456609 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.456634 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.456665 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.456674 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.457984 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.458950 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0424116 0.0424116 -128 128 0.0141805 
+0.0424116 0.0424116 -128 128 0.0141805 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.460083 18735 solver.cpp:243] Iteration 34, loss = 0
+I0724 10:38:10.460103 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.460134 18735 sgd_solver.cpp:137] Iteration 34, lr = 0.01
+I0724 10:38:10.460153 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.460165 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.501091 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.501121 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.501459 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.501482 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.501510 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.501519 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.502764 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.503662 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0652478 0.0652478 -128 128 0.0217847 
+0.0652478 0.0652478 -128 128 0.0217847 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.504770 18735 solver.cpp:243] Iteration 35, loss = 0
+I0724 10:38:10.504789 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.504802 18735 sgd_solver.cpp:137] Iteration 35, lr = 0.01
+I0724 10:38:10.504817 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.504827 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.510959 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.510993 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.511328 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.511353 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.511384 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.511392 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.512666 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.513659 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0851475 0.0851475 -128 128 0.0284106 
+0.0851475 0.0851475 -128 128 0.0284106 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.514791 18735 solver.cpp:243] Iteration 36, loss = 0
+I0724 10:38:10.514811 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.514823 18735 sgd_solver.cpp:137] Iteration 36, lr = 0.01
+I0724 10:38:10.514840 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.514849 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.518275 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.518306 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.518649 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.518674 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.518703 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.518712 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.519887 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.520901 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.102205 0.102205 -128 128 0.0340896 
+0.102205 0.102205 -128 128 0.0340896 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.522104 18735 solver.cpp:243] Iteration 37, loss = 0
+I0724 10:38:10.522125 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.522140 18735 sgd_solver.cpp:137] Iteration 37, lr = 0.01
+I0724 10:38:10.522155 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.522163 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.694008 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.694034 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.694389 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.694409 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.694433 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.694440 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.695646 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.696715 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.116535 0.116535 -128 128 0.0388597 
+0.116535 0.116535 -128 128 0.0388597 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.697865 18735 solver.cpp:243] Iteration 38, loss = 0
+I0724 10:38:10.697885 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.697898 18735 sgd_solver.cpp:137] Iteration 38, lr = 0.01
+I0724 10:38:10.697913 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.697924 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.705513 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.705546 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.705894 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.705921 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.705952 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.705962 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.707201 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.708284 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.128265 0.128265 -128 128 0.0427639 
+0.128265 0.128265 -128 128 0.0427639 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.708462 18735 solver.cpp:243] Iteration 39, loss = 0
+I0724 10:38:10.708482 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.708495 18735 sgd_solver.cpp:137] Iteration 39, lr = 0.01
+I0724 10:38:10.708511 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.708523 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.747660 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.747689 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.748164 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.748184 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.748211 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.748219 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.749321 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.750233 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.13754 0.13754 -128 128 0.0458499 
+0.13754 0.13754 -128 128 0.0458499 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.750449 18735 solver.cpp:243] Iteration 40, loss = 0
+I0724 10:38:10.750473 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.750485 18735 sgd_solver.cpp:137] Iteration 40, lr = 0.01
+I0724 10:38:10.750499 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.750509 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.777590 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.777618 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.777902 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.777925 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.777951 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.777961 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.779173 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.780153 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.14451 0.14451 -128 128 0.0481685 
+0.14451 0.14451 -128 128 0.0481685 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.780328 18735 solver.cpp:243] Iteration 41, loss = 0
+I0724 10:38:10.780346 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.780359 18735 sgd_solver.cpp:137] Iteration 41, lr = 0.01
+I0724 10:38:10.780372 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.780385 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.800567 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.800595 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.800948 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.800968 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.800992 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.801000 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.802039 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.803139 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.149338 0.149338 -128 128 0.0497734 
+0.149338 0.149338 -128 128 0.0497734 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.803334 18735 solver.cpp:243] Iteration 42, loss = 0
+I0724 10:38:10.803369 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.803383 18735 sgd_solver.cpp:137] Iteration 42, lr = 0.01
+I0724 10:38:10.803395 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.803402 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.822022 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.822047 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.822405 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.822429 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.822470 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.822480 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.823469 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.824652 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.152189 0.152189 -128 128 0.0507198 
+0.152189 0.152189 -128 128 0.0507198 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.824820 18735 solver.cpp:243] Iteration 43, loss = 0
+I0724 10:38:10.824837 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.824848 18735 sgd_solver.cpp:137] Iteration 43, lr = 0.01
+I0724 10:38:10.824861 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.824869 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:10.929097 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:10.929122 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:10.929636 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:10.929654 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:10.929677 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:10.929683 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:10.930645 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:10.931607 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.153232 0.153232 -128 128 0.0510641 
+0.153232 0.153232 -128 128 0.0510641 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:10.931810 18735 solver.cpp:243] Iteration 44, loss = 0
+I0724 10:38:10.931835 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:10.931850 18735 sgd_solver.cpp:137] Iteration 44, lr = 0.01
+I0724 10:38:10.931865 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:10.931876 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.131261 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.131294 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.131660 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.131680 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.131711 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.131717 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.132870 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.133896 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.152638 0.152638 -128 128 0.0508631 
+0.152638 0.152638 -128 128 0.0508631 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.134073 18735 solver.cpp:243] Iteration 45, loss = 0
+I0724 10:38:11.134089 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.134104 18735 sgd_solver.cpp:137] Iteration 45, lr = 0.01
+I0724 10:38:11.134117 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.134125 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.171495 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.171528 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.171890 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.171933 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.171965 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.171974 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.173147 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.174295 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.150576 0.150576 -128 128 0.0501733 
+0.150576 0.150576 -128 128 0.0501733 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.174494 18735 solver.cpp:243] Iteration 46, loss = 0
+I0724 10:38:11.174513 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.174525 18735 sgd_solver.cpp:137] Iteration 46, lr = 0.01
+I0724 10:38:11.174540 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.174551 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.216275 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.216305 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.216665 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.216686 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.216712 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.216720 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.217820 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.219130 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.147214 0.147214 -128 128 0.0490505 
+0.147214 0.147214 -128 128 0.0490505 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.219307 18735 solver.cpp:243] Iteration 47, loss = 0
+I0724 10:38:11.219327 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.219341 18735 sgd_solver.cpp:137] Iteration 47, lr = 0.01
+I0724 10:38:11.219357 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.219370 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.220582 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.220614 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.220957 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.220983 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.221014 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.221025 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.222278 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.223351 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.142715 0.142715 -128 128 0.0475492 
+0.142715 0.142715 -128 128 0.0475492 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.223533 18735 solver.cpp:243] Iteration 48, loss = 0
+I0724 10:38:11.223556 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.223569 18735 sgd_solver.cpp:137] Iteration 48, lr = 0.01
+I0724 10:38:11.223587 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.223598 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.257876 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.257907 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.258261 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.258282 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.258314 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.258325 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.259418 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.260545 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.137238 0.137238 -128 128 0.0457223 
+0.137238 0.137238 -128 128 0.0457223 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.260758 18735 solver.cpp:243] Iteration 49, loss = 0
+I0724 10:38:11.260776 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.260788 18735 sgd_solver.cpp:137] Iteration 49, lr = 0.01
+I0724 10:38:11.260818 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.260828 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.306758 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.306785 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.307168 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.307184 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.307207 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.307214 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.309716 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.311015 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.130936 0.130936 -128 128 0.0436207 
+0.130936 0.130936 -128 128 0.0436207 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.312175 18735 solver.cpp:243] Iteration 50, loss = 0
+I0724 10:38:11.312192 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.312207 18735 sgd_solver.cpp:137] Iteration 50, lr = 0.01
+I0724 10:38:11.312223 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.312234 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.322692 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.322724 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.323104 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.323127 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.323153 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.323161 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.324452 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.325325 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.123954 0.123954 -128 128 0.0412927 
+0.123954 0.123954 -128 128 0.0412927 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.325498 18735 solver.cpp:243] Iteration 51, loss = 0
+I0724 10:38:11.325517 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.325531 18735 sgd_solver.cpp:137] Iteration 51, lr = 0.01
+I0724 10:38:11.325546 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.325556 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.361454 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.361483 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.361786 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.361806 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.361897 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.361922 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.362915 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.364001 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.11643 0.11643 -128 128 0.0387845 
+0.11643 0.11643 -128 128 0.0387845 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.364169 18735 solver.cpp:243] Iteration 52, loss = 0
+I0724 10:38:11.364207 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.364220 18735 sgd_solver.cpp:137] Iteration 52, lr = 0.01
+I0724 10:38:11.364230 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.364238 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.406095 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.406118 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.406479 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.406499 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.406523 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.406530 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.407825 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.408747 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.108493 0.108493 -128 128 0.036139 
+0.108493 0.108493 -128 128 0.036139 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.408910 18735 solver.cpp:243] Iteration 53, loss = 0
+I0724 10:38:11.408931 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.408944 18735 sgd_solver.cpp:137] Iteration 53, lr = 0.01
+I0724 10:38:11.408959 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.408972 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.420202 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.420233 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.420562 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.420584 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.420614 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.420625 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.421811 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.422866 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.100265 0.100265 -128 128 0.0333965 
+0.100265 0.100265 -128 128 0.0333965 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.424044 18735 solver.cpp:243] Iteration 54, loss = 0
+I0724 10:38:11.424064 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.424077 18735 sgd_solver.cpp:137] Iteration 54, lr = 0.01
+I0724 10:38:11.424091 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.424100 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.425787 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.425817 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.426175 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.426198 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.426226 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.426235 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.427419 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.429874 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0918564 0.0918564 -128 128 0.0305942 
+0.0918564 0.0918564 -128 128 0.0305942 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.430053 18735 solver.cpp:243] Iteration 55, loss = 0
+I0724 10:38:11.430073 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.430086 18735 sgd_solver.cpp:137] Iteration 55, lr = 0.01
+I0724 10:38:11.430099 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.430109 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.586443 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.586488 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.586864 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.586889 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.586916 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.586925 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.588299 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.589222 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0833696 0.0833696 -128 128 0.027766 
+0.0833696 0.0833696 -128 128 0.027766 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.589406 18735 solver.cpp:243] Iteration 56, loss = 0
+I0724 10:38:11.589426 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.589442 18735 sgd_solver.cpp:137] Iteration 56, lr = 0.01
+I0724 10:38:11.589457 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.589467 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.605186 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.605231 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.605571 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.605589 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.605612 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.605619 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.606621 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.608001 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0748974 0.0748974 -128 128 0.0249427 
+0.0748974 0.0748974 -128 128 0.0249427 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.608182 18735 solver.cpp:243] Iteration 57, loss = 0
+I0724 10:38:11.608203 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.608218 18735 sgd_solver.cpp:137] Iteration 57, lr = 0.01
+I0724 10:38:11.608235 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.608247 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.613766 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.613800 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.614145 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.614168 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.614198 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.614207 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.615628 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.616569 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0665231 0.0665231 -128 128 0.0221523 
+0.0665231 0.0665231 -128 128 0.0221523 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.617597 18735 solver.cpp:243] Iteration 58, loss = 0
+I0724 10:38:11.617617 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.617635 18735 sgd_solver.cpp:137] Iteration 58, lr = 0.01
+I0724 10:38:11.617651 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.617661 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.623843 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.623874 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.624204 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.624228 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.624255 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.624264 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.625435 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.626504 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0583206 0.0583206 -128 128 0.0194193 
+0.0583206 0.0583206 -128 128 0.0194193 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.627672 18735 solver.cpp:243] Iteration 59, loss = 0
+I0724 10:38:11.627692 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.627704 18735 sgd_solver.cpp:137] Iteration 59, lr = 0.01
+I0724 10:38:11.627719 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.627728 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.694315 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.694344 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.694694 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.694720 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.694751 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.694761 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.696014 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.697003 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0503548 0.0503548 -128 128 0.0167653 
+0.0503548 0.0503548 -128 128 0.0167653 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.698156 18735 solver.cpp:243] Iteration 60, loss = 0
+I0724 10:38:11.698177 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.698190 18735 sgd_solver.cpp:137] Iteration 60, lr = 0.01
+I0724 10:38:11.698206 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.698216 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.744748 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.744776 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.745131 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.745149 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.745172 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.745180 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.746273 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.747448 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0426819 0.0426819 -128 128 0.0142089 
+0.0426819 0.0426819 -128 128 0.0142089 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.748611 18735 solver.cpp:243] Iteration 61, loss = 0
+I0724 10:38:11.748628 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.748639 18735 sgd_solver.cpp:137] Iteration 61, lr = 0.01
+I0724 10:38:11.748656 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.748667 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.784974 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.785004 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.785367 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.785387 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.785409 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.785418 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.786602 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.787783 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0353492 0.0353492 -128 128 0.011766 
+0.0353492 0.0353492 -128 128 0.011766 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.787951 18735 solver.cpp:243] Iteration 62, loss = 0
+I0724 10:38:11.787967 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.787977 18735 sgd_solver.cpp:137] Iteration 62, lr = 0.01
+I0724 10:38:11.787991 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.787998 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.790856 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.790882 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.791249 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.791268 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.791290 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.791297 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.792384 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.793457 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0283961 0.0283961 -128 128 0.00944974 
+0.0283961 0.0283961 -128 128 0.00944974 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.793656 18735 solver.cpp:243] Iteration 63, loss = 0
+I0724 10:38:11.793673 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.793684 18735 sgd_solver.cpp:137] Iteration 63, lr = 0.01
+I0724 10:38:11.793695 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.793704 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.802240 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.802268 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.802634 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.802676 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.802703 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.802711 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.803804 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.804988 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0218542 0.0218542 -128 128 0.00727052 
+0.0218542 0.0218542 -128 128 0.00727052 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.805153 18735 solver.cpp:243] Iteration 64, loss = 0
+I0724 10:38:11.805171 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.805182 18735 sgd_solver.cpp:137] Iteration 64, lr = 0.01
+I0724 10:38:11.805194 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.805202 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:11.859966 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:11.859992 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:11.860366 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:11.860383 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:11.860402 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:11.860409 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:11.861382 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:11.862594 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0157479 0.0157479 -128 128 0.00523648 
+0.0157479 0.0157479 -128 128 0.00523648 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:11.862781 18735 solver.cpp:243] Iteration 65, loss = 0
+I0724 10:38:11.862799 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:11.862813 18735 sgd_solver.cpp:137] Iteration 65, lr = 0.01
+I0724 10:38:11.862828 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:11.862838 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:12.027659 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:12.027688 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:12.028055 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:12.028071 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:12.028090 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:12.028096 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:12.029049 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:12.030468 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.0100946 0.0100946 -128 128 0.00335346 
+0.0100946 0.0100946 -128 128 0.00335346 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:12.030640 18735 solver.cpp:243] Iteration 66, loss = 0
+I0724 10:38:12.030659 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:12.030673 18735 sgd_solver.cpp:137] Iteration 66, lr = 0.01
+I0724 10:38:12.030688 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:12.030699 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:12.040637 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:12.040670 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:12.040966 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:12.040987 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:12.041013 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:12.041020 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:12.042253 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:12.043241 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.00490565 0.00490565 -128 128 0.00162518 
+0.00490565 0.00490565 -128 128 0.00162518 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:12.043406 18735 solver.cpp:243] Iteration 67, loss = 0
+I0724 10:38:12.043424 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:12.043437 18735 sgd_solver.cpp:137] Iteration 67, lr = 0.01
+I0724 10:38:12.043473 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:12.043483 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:12.072465 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:12.072494 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:12.072861 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:12.072880 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:12.072902 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:12.072908 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:12.074472 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:12.075417 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+0.000186526 0.000186526 -128 128 5.34755e-05 
+0.000186526 0.000186526 -128 128 5.34755e-05 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:12.076201 18735 solver.cpp:243] Iteration 68, loss = 0
+I0724 10:38:12.076220 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:12.076241 18735 sgd_solver.cpp:137] Iteration 68, lr = 0.01
+I0724 10:38:12.076257 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:12.076268 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:12.108345 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:12.108376 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:12.108698 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:12.108719 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:12.108745 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:12.108752 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:12.109897 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:12.110971 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.00406255 -0.00406255 -128 128 -0.0013616 
+-0.00406255 -0.00406255 -128 128 -0.0013616 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:12.111136 18735 solver.cpp:243] Iteration 69, loss = 0
+I0724 10:38:12.111152 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:12.111174 18735 sgd_solver.cpp:137] Iteration 69, lr = 0.01
+I0724 10:38:12.111186 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:12.111193 18735 sgd_solver.cpp:140] [1] 1 8 (8)
+I0724 10:38:12.257302 18735 convInt8_withKL_layer.cpp:317] caffe_gpu_iGemm PARAM : 32 91204 27
+I0724 10:38:12.257344 18735 convInt8_withKL_layer.cu:54] weight_temp_unit_sacle = 0.00262343;  weight_temp_unit_sacle_1 = 381.181
+I0724 10:38:12.257663 18735 convInt8_withKL_layer.cu:70] input_temp_unit_sacle = 1.00787;  input_temp_unit_sacle_1 = 0.992188
+I0724 10:38:12.257684 18735 convInt8_withKL_layer.cu:122] 27 302 302 (2462508)
+I0724 10:38:12.257709 18735 convInt8_withKL_layer.cu:145] IM2COL HAS BEEN DONE
+I0724 10:38:12.257715 18735 convInt8_withKL_layer.cu:155] needReshape = 1 AND (newN,newK)=( 91204, 28 ) THE OLD = (91204, 27 )
+I0724 10:38:12.258922 18735 convInt8_withKL_layer.cu:161] cudaMalloc DONE
+I0724 10:38:12.259968 18735 convInt8_withKL_layer.cu:243] forward_gpu_gemm DONE
+**************************
+1 8 (8)
+-0.00784608 -0.00784608 -128 128 -0.00262154 
+-0.00784608 -0.00784608 -128 128 -0.00262154 
+*************tt*************
+*************int8 result*************
+*************fp32 result*************
+============================
+I0724 10:38:12.260846 18735 solver.cpp:243] Iteration 70, loss = 0
+I0724 10:38:12.260869 18735 solver.cpp:259]     Train net output #0: stem1_int8 = 0
+I0724 10:38:12.260885 18735 sgd_solver.cpp:137] Iteration 70, lr = 0.01
+I0724 10:38:12.260898 18735 sgd_solver.cpp:140] [0] 32 3 3 3 (864)
+I0724 10:38:12.260907 18735 sgd_solver.cpp:140] [1] 1 8 (8)
