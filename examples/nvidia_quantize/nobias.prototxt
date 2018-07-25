@@ -3,8 +3,8 @@ input: "data"
 input_shape {
   dim: 1
   dim: 3
-  dim: 304
-  dim: 304
+  dim: 6
+  dim: 6
 }
 layer {
   name: "stem1"
@@ -13,7 +13,7 @@ layer {
   top: "stem1"
   convolution_param {
     bias_term : false
-    num_output: 32
+    num_output: 2
     pad: 0
     kernel_size: 3
     stride: 1

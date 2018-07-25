@@ -188,6 +188,8 @@ class ConvInt8withKLLayer : public Layer<Dtype> {
   int col_offset_;
   int output_offset_;
 
+
+	
   Blob<signed char> col_buffer_;
   Blob<Dtype> top_result;
   Blob<Dtype> relativeEntropyBlob;

@@ -15,8 +15,8 @@ layer {
     resize_param {
       prob: 1.0 
       resize_mode: WARP
-      height: 304
-      width: 304
+      height: 6
+      width: 6
       interp_mode: LINEAR
       interp_mode: AREA
       interp_mode: NEAREST
@@ -116,7 +116,7 @@ layer {
   top: "stem1"
   convolution_param {
     bias_term : false
-    num_output: 32
+    num_output: 2
     pad: 0
     kernel_size: 3
     stride: 1
@@ -142,7 +142,7 @@ layer {
   top: "stem1_int8"
   convolution_param {
     bias_term : false
-    num_output: 32
+    num_output: 2
     pad: 0
     kernel_size: 3
     stride: 1
