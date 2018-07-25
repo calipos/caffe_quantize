@@ -7,7 +7,7 @@ import os
 import numpy as np
 import numpy.linalg as linalg
 
-CAFFE_ROOT = '/home/lbl/lbl_trainData/git/caffe_nvidia_quantize'
+CAFFE_ROOT = '/home/lbl/lbl_trainData/git/test_git_quantize'
 if osp.join(CAFFE_ROOT,'python') not in sys.path:
         sys.path.insert(0,osp.join(CAFFE_ROOT,'python'))
 
@@ -15,10 +15,11 @@ import caffe
 
 
 caffe.set_mode_gpu()
-nobias_net = caffe.Net("/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/nobias.prototxt", caffe.TEST)
+nobias_net = caffe.Net("/media/hdd/lbl_trainData/git/test_git_quantize/examples/nvidia_quantize/nobias.prototxt", caffe.TEST)
 stem1Layer = nobias_net._layer_by_name("stem1")
 print len(stem1Layer.blobs)
 print (stem1Layer.blobs[0].shape_string())
+print (stem1Layer.blobs[0].data[0])
 # print (stem1Layer.blobs[1].data[0])
 # print (stem1Layer.blobs[1].data[1])
 nobias_net.save("nobias.caffemodel")

@@ -12,6 +12,7 @@
 //#define SHOW_WEIGHT2INT8
 //#define SHOW_INPUT2INT8
 //#define SHOW_FP32COL
+//#define SHOW_GEMM_RESHAPE
 namespace caffe {
 
 /**

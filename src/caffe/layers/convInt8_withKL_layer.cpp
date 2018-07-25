@@ -10,6 +10,7 @@ void ConvInt8withKLLayer<Dtype>::getFp32Weight()
 {
   NetParameter param;
   ReadNetParamsFromBinaryFileOrDie(this->weight_model_path, &param);
+	LOG(INFO)<<"weight from "<<this->weight_model_path;
   int num_source_layers = param.layer_size();
   for (int i = 0; i < num_source_layers; ++i) {
     const LayerParameter& source_layer = param.layer(i);

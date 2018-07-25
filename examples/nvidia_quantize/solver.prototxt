@@ -1,4 +1,4 @@
-train_net: "/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/quantizedNet.prototxt"
+train_net: "/media/hdd/lbl_trainData/git/test_git_quantize/examples/nvidia_quantize/quantizedNet.prototxt"
 base_lr: 0.00999999977648
 display: 1
 max_iter: 400
@@ -7,7 +7,7 @@ gamma: 0.10000000149
 momentum: 0.899999976158
 weight_decay: 0.000500000023749
 snapshot: 2500
-snapshot_prefix: "/media/hdd/lbl_trainData/git/caffe_nvidia_quantize/examples/nvidia_quantize/"
+snapshot_prefix: "/media/hdd/lbl_trainData/git/test_git_quantize/examples/nvidia_quantize/"
 solver_mode: GPU
 device_id: 0
 debug_info: false
