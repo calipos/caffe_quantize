@@ -1,4 +1,4 @@
 # caffe_quantize
-[![Build Status](https://builds.apache.org/job/incubator-mxnet/job/master/badge/icon)]
+[![Build Status](https://builds.apache.org/static/324b44f3/images/48x48/yellow.png)]
 
-未完成！
+不稳定！
